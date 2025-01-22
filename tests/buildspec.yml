@@ -1,0 +1,22 @@
+version: 0.2
+
+env:
+  variables:
+    base_url: "api_gateway"
+
+phases:
+  pre_build:
+    commands:
+      - npm install newman --global
+      - npm install newman-reporter-html --global
+      - npm install --global newman-reporter-htmlextra
+  install:
+    runtime-versions:
+      nodejs: 12
+  build:
+    commands:
+      - newman run -r html,cli,junit FTS.postman_collection.json --reporter-junit-export report.xml --env-var base_url=$base_url
+
+artifacts:
+  files:
+    - report.xml
