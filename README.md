@@ -23,7 +23,7 @@ For installation instructions, please see the [terraform deployment directory](t
 
 # Database
 
-# About
+## About
 
 The goal of PO.DAAC's Feature Translation Service is to provide hydrologists with a tool that abstracts away unfamiliar NASA dataset terminology and allows them to query NASA information through a more hydrology-specific language.
 
