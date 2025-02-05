@@ -76,7 +76,6 @@ resource "aws_ssm_parameter" "fts-db-admin" {
   type  = "String"
   value = aws_db_instance.fts-database.username
   tags = local.default_tags
-  overwrite = true
 }
 
 resource "aws_ssm_parameter" "fts-db-admin-pass" {
@@ -84,7 +83,6 @@ resource "aws_ssm_parameter" "fts-db-admin-pass" {
   type  = "SecureString"
   value = aws_db_instance.fts-database.password
   tags = local.default_tags
-  overwrite = true
 }
 
 resource "aws_ssm_parameter" "fts-db-user" {
@@ -92,7 +90,6 @@ resource "aws_ssm_parameter" "fts-db-user" {
   type  = "String"
   value = "ftsuser"
   tags = local.default_tags
-  overwrite = true
 }
 
 resource "aws_ssm_parameter" "fts-db-user-pass" {
@@ -100,7 +97,6 @@ resource "aws_ssm_parameter" "fts-db-user-pass" {
   type  = "SecureString"
   value = random_password.db_user_pass.result
   tags = local.default_tags
-  overwrite = true
 }
 
 resource "aws_ssm_parameter" "fts-db-host" {
@@ -108,7 +104,6 @@ resource "aws_ssm_parameter" "fts-db-host" {
   type  = "String"
   value = aws_db_instance.fts-database.address
   tags = local.default_tags
-  overwrite = true
 }
 
 resource "aws_ssm_parameter" "fts-db-name" {
@@ -116,7 +111,6 @@ resource "aws_ssm_parameter" "fts-db-name" {
   type  = "String"
   value = aws_db_instance.fts-database.name
   tags = local.default_tags
-  overwrite = true
 }
 
 resource "aws_ssm_parameter" "fts-db-sg" {
@@ -124,5 +118,4 @@ resource "aws_ssm_parameter" "fts-db-sg" {
   type  = "String"
   value = aws_security_group.service-db-sg.id
   tags = local.default_tags
-  overwrite = true
 }
