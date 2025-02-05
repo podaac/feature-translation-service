@@ -485,9 +485,9 @@ def table_check(engine):
     metadata = MetaData()
 
     reaches = Table(
-        'reaches', metadata, autoload=True, autoload_with=engine
+        'reaches', metadata, autoload_with=engine
     )
-    reach_query = select([reaches]).limit(4)
+    reach_query = select(reaches).limit(4)
 
     one_reach = None
     try:
@@ -501,9 +501,9 @@ def table_check(engine):
         logger.info("No table available")
 
     nodes = Table(
-        'nodes', metadata, autoload=True, autoload_with=engine
+        'nodes', metadata, autoload_with=engine
     )
-    node_query = select([nodes]).limit(4)
+    node_query = select(nodes).limit(4)
 
     one_node = None
     try:

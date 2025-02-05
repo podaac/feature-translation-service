@@ -37,6 +37,7 @@ importlib-metadata = "^8.6.1"
 recommonmark = "^0.7.1"
 sphinx-markdown-tables = "^0.0.17"
 sphinx-rtd-theme = "^3.0.2"
+fiona = "^1.10.1"
 
 [tool.poetry.scripts]
 run_sword = 'fts.db.sword.setup_sword:main'
