@@ -2,8 +2,8 @@
 # team members to control and update terraform state.
 terraform {
   backend "s3" {
-    key    = "services/feature-translation-service/terraform.tfstate"
     region = "us-west-2"
+    encrypt = true
   }
 }
 
