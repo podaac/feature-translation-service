@@ -2,7 +2,7 @@
 # team members to control and update terraform state.
 terraform {
   backend "s3" {
-    region = "us-west-2"
+    region  = "us-west-2"
     encrypt = true
   }
 }

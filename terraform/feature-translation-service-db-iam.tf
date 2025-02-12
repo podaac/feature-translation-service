@@ -94,7 +94,7 @@ resource "aws_iam_role" "fts-service-db-role" {
   tags = local.default_tags
 
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  assume_role_policy = <<EOF
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -114,6 +114,6 @@ EOF
 resource "aws_iam_policy_attachment" "fts-service-db-attach" {
   name = "${local.ec2_resources_name}-attachment"
   roles = [
-    aws_iam_role.fts-service-db-role.id]
+  aws_iam_role.fts-service-db-role.id]
   policy_arn = aws_iam_policy.fts-service-db-policy.arn
 }

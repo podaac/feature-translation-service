@@ -12,10 +12,10 @@ resource "aws_lambda_function" "fts_sword_lambda" {
   # share fargate variables with lambda
   environment {
     variables = {
-      REGION = var.region
-      TASK_NAME = aws_ecs_task_definition.fargate_task.arn
-      FARGATE_CLUSTER = aws_ecs_cluster.fargate-cluster.name
-      FARGATE_SUBNET_ID = element(tolist(aws_db_subnet_group.default.subnet_ids),0)
+      REGION                 = var.region
+      TASK_NAME              = aws_ecs_task_definition.fargate_task.arn
+      FARGATE_CLUSTER        = aws_ecs_cluster.fargate-cluster.name
+      FARGATE_SUBNET_ID      = element(tolist(aws_db_subnet_group.default.subnet_ids), 0)
       FARGATE_SECURITY_GROUP = aws_security_group.service-db-sg.id
     }
   }

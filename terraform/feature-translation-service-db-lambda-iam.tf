@@ -59,10 +59,10 @@ POLICY
 
 #----- Lambda IAM Role --------
 resource "aws_iam_role" "lambda-role" {
-  name = "${local.ec2_resources_name}-lambda-role"
-  tags = local.default_tags
+  name                 = "${local.ec2_resources_name}-lambda-role"
+  tags                 = local.default_tags
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  assume_role_policy = <<EOF
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

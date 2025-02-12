@@ -6,9 +6,9 @@ resource "aws_ecs_cluster" "fargate-cluster" {
 
 #----- ECS  Services--------
 resource "aws_cloudwatch_log_group" "fargate-task-log-group" {
-  name = "${local.ec2_resources_name}-fargate-worker"
+  name              = "${local.ec2_resources_name}-fargate-worker"
   retention_in_days = 60
-  tags = local.default_tags
+  tags              = local.default_tags
 }
 
 #----- Fargate Task Definition --------
@@ -56,18 +56,18 @@ resource "aws_ecs_task_definition" "fargate_task" {
 ]
 EOF
 
-  network_mode             = "awsvpc"
-  cpu                      = var.task_cpu
-  memory                   = var.task_memory
+  network_mode = "awsvpc"
+  cpu          = var.task_cpu
+  memory       = var.task_memory
 
   execution_role_arn = aws_iam_role.fargate-task-execution-role.arn
   task_role_arn      = aws_iam_role.ecs_task_role.arn
-  tags = local.default_tags
+  tags               = local.default_tags
 }
 
 #----- CloudWatch Log Group --------
 resource "aws_cloudwatch_log_group" "logs" {
   name              = "/ecs/${local.ec2_resources_name}-fargate-task-logs"
   retention_in_days = var.logs_retention_days
-  tags = local.default_tags
+  tags              = local.default_tags
 }
