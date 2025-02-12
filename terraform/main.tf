@@ -9,8 +9,6 @@ terraform {
 
 provider "aws" {
   region = "us-west-2"
-  shared_credentials_file = var.credentials
-  profile = var.profile
 
   ignore_tags {
     key_prefixes = ["gsfc-ngap"]
@@ -30,10 +28,10 @@ locals {
   ftsdb_resource_name = "service-${var.db_app_name}-${local.environment}"
 
   default_tags = length(var.default_tags) == 0 ? {
-    team: "TVA",
-    application: local.ec2_resources_name,
+    team : "TVA",
+    application : local.ec2_resources_name,
     Environment = var.stage
-    Version = var.docker_tag
+    Version     = var.docker_tag
   } : var.default_tags
 }
 

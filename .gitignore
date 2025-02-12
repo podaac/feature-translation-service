@@ -171,3 +171,4 @@ cython_debug/
 .vscode/
 /docker/dynamodb/shared-local-instance.db
 /terraform/tfplan
+*.zip

@@ -1,12 +1,8 @@
-variable "app_name" {default = "fts-api"}
-variable "db_app_name" {default = "fts-db"}
+variable "app_name" { default = "fts-api" }
+variable "db_app_name" { default = "fts-db" }
 variable "stage" {}
-variable "credentials" {}
-variable "profile" { }
 variable "vpc_id" {}
 variable "private_subnets" {}
-variable "docker_tag" {}
-variable "default_vpc_sg" {}
 variable "lambda_package" {}
 
 variable "region" {
@@ -14,12 +10,12 @@ variable "region" {
 }
 
 variable "default_tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
 
 variable "docker_tag" {
-  default = "poodaac-cloud/podaac-ftsdb:latest"
+  default = "poodaac-cloud/podaac-ftsdb-sword:latest"
 }
 
 #----- Fargate Variables--------

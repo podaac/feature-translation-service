@@ -40,7 +40,7 @@ terraform init -reconfigure -input=false -backend-config="bucket=podaac-services
 
 
 if [[ -z "${docker_tag}" ]]; then
-  terraform destroy -auto-approve -var-file=tfvars/"${tf_venue}".tfvars -var="credentials=~/.aws/credentials" -var="profile=ngap-service-${tf_venue}"
+  terraform destroy -auto-approve -var-file=tfvars/"${tf_venue}".tfvars
 else
-  terraform destroy -auto-approve -var-file=tfvars/"${tf_venue}".tfvars -var="credentials=~/.aws/credentials" -var="profile=ngap-service-${tf_venue}" -var="docker_tag=${docker_tag}"
+  terraform destroy -auto-approve -var-file=tfvars/"${tf_venue}".tfvars -var="docker_tag=${docker_tag}"
 fi
