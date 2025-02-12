@@ -17,7 +17,7 @@ provider "aws" {
 
 locals {
   name        = var.app_name
-  environment = var.stage
+  environment = lower(var.stage)
 
   account_id = data.aws_caller_identity.current.account_id
 

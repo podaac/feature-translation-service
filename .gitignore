@@ -172,3 +172,4 @@ cython_debug/
 /docker/dynamodb/shared-local-instance.db
 /terraform/tfplan
 *.zip
+HUC_DATA

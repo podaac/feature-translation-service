@@ -2,7 +2,9 @@ variable "app_name" { default = "fts-api" }
 variable "db_app_name" { default = "fts-db" }
 variable "stage" {}
 variable "vpc_id" {}
-variable "private_subnets" {}
+variable "private_subnets" {
+  type = list(string)
+}
 variable "lambda_package" {}
 
 variable "region" {
