@@ -60,7 +60,7 @@ resource "aws_db_instance" "fts-database" {
   engine               = "mysql"
   engine_version       = "5.7"
   instance_class       = "db.t2.micro"
-  name                 = "ftsdb"
+  db_name                 = "ftsdb"
   username             = "ftsadmin"
   password             = random_password.db_pass.result
   parameter_group_name = "default.mysql5.7"
@@ -109,7 +109,7 @@ resource "aws_ssm_parameter" "fts-db-host" {
 resource "aws_ssm_parameter" "fts-db-name" {
   name  = "${local.ec2_resources_name}-name"
   type  = "String"
-  value = aws_db_instance.fts-database.name
+  value = aws_db_instance.fts-database.db_name
   tags = local.default_tags
 }
 
