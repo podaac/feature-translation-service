@@ -25,6 +25,7 @@ geopandas = "^1.0.1"
 pandas = "^2.2.3"
 tqdm = "^4.67.1"
 visvalingamwyatt = "^0.3.0"
+fiona = "^1.10.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
