@@ -492,6 +492,7 @@ def table_check(engine):
     one_reach = None
     try:
         reach_result = conn.execute(reach_query)
+        print("Reach columns: %s", reach_result.keys())
         one_reach = reach_result.fetchone()
         logger.info("ONE REACH: %s", one_reach)
         logger.info("Number of reach columns: %s", len(one_reach))
@@ -508,6 +509,7 @@ def table_check(engine):
     one_node = None
     try:
         node_result = conn.execute(node_query)
+        print("Node columns: %s", node_result.keys())
         one_node = node_result.fetchone()
         logger.info("ONE NODE: %s", one_node)
         logger.info("Number of node columns: %s", len(one_node))
@@ -555,7 +557,7 @@ def table_data_types_reaches(engine):
         "FROM INFORMATION_SCHEMA.COLUMNS "
         "WHERE table_schema = :dbname and table_name = 'reaches'"
     )
-    dtype_results = conn.execute(tbl_data_type, dbname=DB_NAME)
+    dtype_results = conn.execute(tbl_data_type, {"dbname": DB_NAME})
     for result in dtype_results:
         logger.info(result)
 
@@ -572,7 +574,7 @@ def table_data_types_nodes(engine):
         "FROM INFORMATION_SCHEMA.COLUMNS "
         "WHERE table_schema = :dbname and table_name = 'nodes'"
     )
-    dtype_results = conn.execute(tbl_data_type, dbname=DB_NAME)
+    dtype_results = conn.execute(tbl_data_type, {"dbname": DB_NAME})
     for result in dtype_results:
         logger.info(result)
 
