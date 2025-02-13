@@ -6,6 +6,7 @@ resource "aws_lambda_function" "fts_sword_lambda" {
   handler          = "sword_fargate.run_fargate_task"
   source_code_hash = filebase64sha256(var.lambda_package)
   runtime          = "python3.12"
+  timeout          = 300
 
   # share fargate variables with lambda
   environment {
