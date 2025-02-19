@@ -40,6 +40,11 @@ sphinx-markdown-tables = "^0.0.17"
 sphinx-rtd-theme = "^3.0.2"
 fiona = "^1.10.1"
 
+[tool.poetry.group.api.dependencies]
+boto3 = "^1.36.23"
+geojson = "^3.2.0"
+pymysql = "^1.1.1"
+
 [tool.poetry.scripts]
 run_sword = 'fts.db.sword.setup_sword:main'
 

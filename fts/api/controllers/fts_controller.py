@@ -13,9 +13,9 @@ import logging
 import os
 import sys
 import time
-import geojson
 
 import boto3
+import geojson
 import pymysql
 
 try:
