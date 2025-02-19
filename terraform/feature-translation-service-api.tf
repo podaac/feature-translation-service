@@ -293,7 +293,7 @@ resource "aws_codebuild_project" "fts" {
     namespace_type      = "BUILD_ID"
     encryption_disabled = false
     location            = "podaac-services-${var.stage}-deploy"
-    path                = "internal/fts/test-reports"
+    path                = "internal/${local.ftsapi_resource_name}/test-reports"
     type                = "S3"
   }
 
@@ -320,7 +320,7 @@ resource "aws_codebuild_project" "fts" {
   source {
     insecure_ssl = false
     type         = "S3"
-    location     = "podaac-services-${var.stage}-deploy/internal/fts/"
+    location     = "podaac-services-${var.stage}-deploy/internal/${local.ftsapi_resource_name}/"
   }
 
   vpc_config {
