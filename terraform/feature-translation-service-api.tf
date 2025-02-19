@@ -10,7 +10,7 @@ data "aws_ssm_parameter" "fts-db-sg" {
 resource "aws_security_group" "service-app-sg" {
   description = "controls access to the lambda Application"
   vpc_id      = var.vpc_id
-  name        = "${local.ec2_resources_name}-sg"
+  name        = "${local.ftsapi_resource_name}-sg"
 
   ingress {
     protocol    = "tcp"
@@ -43,7 +43,7 @@ resource "aws_security_group_rule" "allow_app_in" {
 # Lambda Function for the last stable pre-1.0 release of the API. This function is intended to be temprorary
 # and should be removed once clients have moved off of this version (primarily, earthdata search client)
 resource "aws_lambda_function" "fts_api_lambda_0_2_1" {
-  function_name = "${local.ec2_resources_name}-0_2_1"
+  function_name = "${local.ftsapi_resource_name}-0_2_1"
   role          = aws_iam_role.fts-service-role.arn
   package_type  = "Image"
   image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/podaac/podaac-cloud/podaac-fts:0.2.1"
@@ -96,7 +96,7 @@ resource "aws_api_gateway_stage" "fts-api-gateway-stage" {
 }
 
 resource "aws_lambda_function" "fts_api_lambdav1" {
-  function_name = "${local.ec2_resources_name}-function"
+  function_name = "${local.ftsapi_resource_name}-function"
   role          = aws_iam_role.fts-service-role.arn
   package_type  = "Image"
   image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_api_tag}"
@@ -132,7 +132,7 @@ resource "aws_lambda_permission" "allow_fts" {
 
 # API Gateway
 resource "aws_api_gateway_rest_api" "fts-api-gateway" {
-  name        = "${local.ec2_resources_name}-api-gateway"
+  name        = "${local.ftsapi_resource_name}-api-gateway"
   description = "API to access Feature Translation Service"
   body = templatefile(
     "${path.module}/api_specification_templates/fts_aws_api.yml",
@@ -162,7 +162,7 @@ output "url" {
 }
 
 resource "aws_ssm_parameter" "fts-api-url" {
-  name  = "fts-api-url"
+  name  = "${local.ftsapi_resource_name}-api-url"
   type  = "String"
   value = aws_api_gateway_deployment.fts-api-gateway-deployment.invoke_url
 }
@@ -174,7 +174,7 @@ resource "aws_ssm_parameter" "fts-api-url" {
 #CodeBuild IAM role
 
 resource "aws_iam_role" "fts-codebuild-iam" {
-  name = "fts-codebuild"
+  name = "${local.ftsapi_resource_name}-codebuild"
 
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
   assume_role_policy   = <<EOF
@@ -282,7 +282,7 @@ POLICY
 #CodeBuild Project
 
 resource "aws_codebuild_project" "fts" {
-  name          = "FTS"
+  name          = "${local.ftsapi_resource_name}-fts"
   description   = "FTS Postman Testing"
   build_timeout = "60"
   service_role  = aws_iam_role.fts-codebuild-iam.arn
