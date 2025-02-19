@@ -6,8 +6,8 @@ resource "aws_iam_instance_profile" "fts-service-profile" {
 }
 
 resource "aws_iam_policy" "fts-service-policy" {
-  name = "${local.ec2_resources_name}-service-policy"
-  path = "/"
+  name   = "${local.ec2_resources_name}-service-policy"
+  path   = "/"
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -76,7 +76,7 @@ resource "aws_iam_role" "fts-service-role" {
   name = "${local.ec2_resources_name}-service-role"
 
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  assume_role_policy = <<EOF
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

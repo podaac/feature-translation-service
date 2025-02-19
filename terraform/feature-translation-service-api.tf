@@ -9,8 +9,8 @@ data "aws_ssm_parameter" "fts-db-sg" {
 ## Application Lambda Security Group
 resource "aws_security_group" "service-app-sg" {
   description = "controls access to the lambda Application"
-  vpc_id = var.vpc_id
-  name   = "${local.ec2_resources_name}-sg"
+  vpc_id      = var.vpc_id
+  name        = "${local.ec2_resources_name}-sg"
 
   ingress {
     protocol    = "tcp"
@@ -32,11 +32,11 @@ resource "aws_security_group" "service-app-sg" {
 
 ## Allow ingress from the lambda security group to the database security group
 resource "aws_security_group_rule" "allow_app_in" {
-  type        = "ingress"
-  security_group_id = data.aws_ssm_parameter.fts-db-sg.value
-  protocol    = "tcp"
-  from_port   = 3306
-  to_port     = 3306
+  type                     = "ingress"
+  security_group_id        = data.aws_ssm_parameter.fts-db-sg.value
+  protocol                 = "tcp"
+  from_port                = 3306
+  to_port                  = 3306
   source_security_group_id = aws_security_group.service-app-sg.id
 }
 
@@ -45,27 +45,27 @@ resource "aws_security_group_rule" "allow_app_in" {
 resource "aws_lambda_function" "fts_api_lambda_0_2_1" {
   function_name = "${local.ec2_resources_name}-0_2_1"
   role          = aws_iam_role.fts-service-role.arn
-  package_type = "Image"
+  package_type  = "Image"
   image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/podaac/podaac-cloud/podaac-fts:0.2.1"
   timeout       = 5
 
   vpc_config {
-    subnet_ids = var.private_subnets
+    subnet_ids         = var.private_subnets
     security_group_ids = [aws_security_group.service-app-sg.id]
   }
 
   environment {
     variables = {
-      DB_HOST=aws_ssm_parameter.fts-db-host.value
-      DB_NAME=aws_ssm_parameter.fts-db-name.value
-      DB_USERNAME=aws_ssm_parameter.fts-db-user.value
-      DB_PASSWORD_SSM_NAME=aws_ssm_parameter.fts-db-user-pass.name
+      DB_HOST              = aws_ssm_parameter.fts-db-host.value
+      DB_NAME              = aws_ssm_parameter.fts-db-name.value
+      DB_USERNAME          = aws_ssm_parameter.fts-db-user.value
+      DB_PASSWORD_SSM_NAME = aws_ssm_parameter.fts-db-user-pass.name
     }
   }
 
   tags = merge(local.default_tags, {
-        "Version": "0.2.1"
-    })
+    "Version" : "0.2.1"
+  })
 }
 
 resource "aws_lambda_permission" "allow_fts_0_2_1" {
@@ -81,8 +81,7 @@ resource "aws_lambda_permission" "allow_fts_0_2_1" {
 
 resource "aws_api_gateway_deployment" "fts-api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.fts-api-gateway.id
-  stage_name  = "default"
-  depends_on = [aws_api_gateway_rest_api.fts-api-gateway]
+  depends_on  = [aws_api_gateway_rest_api.fts-api-gateway]
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_rest_api.fts-api-gateway.body
@@ -90,24 +89,30 @@ resource "aws_api_gateway_deployment" "fts-api-gateway-deployment" {
   }
 }
 
+resource "aws_api_gateway_stage" "fts-api-gateway-stage" {
+  deployment_id = aws_api_gateway_deployment.fts-api-gateway-deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.fts-api-gateway.id
+  stage_name    = "default"
+}
+
 resource "aws_lambda_function" "fts_api_lambdav1" {
   function_name = "${local.ec2_resources_name}-function"
   role          = aws_iam_role.fts-service-role.arn
-  package_type = "Image"
+  package_type  = "Image"
   image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_tag}"
   timeout       = 5
 
   vpc_config {
-    subnet_ids = var.private_subnets
+    subnet_ids         = var.private_subnets
     security_group_ids = [aws_security_group.service-app-sg.id]
   }
 
   environment {
     variables = {
-      DB_HOST=aws_ssm_parameter.fts-db-host.value
-      DB_NAME=aws_ssm_parameter.fts-db-name.value
-      DB_USERNAME=aws_ssm_parameter.fts-db-user.value
-      DB_PASSWORD_SSM_NAME=aws_ssm_parameter.fts-db-user-pass.name
+      DB_HOST              = aws_ssm_parameter.fts-db-host.value
+      DB_NAME              = aws_ssm_parameter.fts-db-name.value
+      DB_USERNAME          = aws_ssm_parameter.fts-db-user.value
+      DB_PASSWORD_SSM_NAME = aws_ssm_parameter.fts-db-user-pass.name
     }
   }
 
@@ -129,13 +134,13 @@ resource "aws_lambda_permission" "allow_fts" {
 resource "aws_api_gateway_rest_api" "fts-api-gateway" {
   name        = "${local.ec2_resources_name}-api-gateway"
   description = "API to access Feature Translation Service"
-  body        = templatefile(
-                  "${path.module}/api-specification-templates/fts_aws_api.yml", 
-                  {
-                    ftsapi_v021_lambda_arn = aws_lambda_function.fts_api_lambda_0_2_1.invoke_arn
-                    ftsapi_lambda_arn = aws_lambda_function.fts_api_lambdav1.invoke_arn
-                    vpc_id = var.vpc_id
-                  })
+  body = templatefile(
+    "${path.module}/api_specification_templates/fts_aws_api.yml",
+    {
+      ftsapi_v021_lambda_arn = aws_lambda_function.fts_api_lambda_0_2_1.invoke_arn
+      ftsapi_lambda_arn      = aws_lambda_function.fts_api_lambdav1.invoke_arn
+      vpc_id                 = var.vpc_id
+  })
   parameters = {
     "basemap" = "split"
   }
@@ -148,7 +153,7 @@ resource "aws_api_gateway_rest_api" "fts-api-gateway" {
 }
 
 resource "aws_cloudwatch_log_group" "fts-api-gateway-logs" {
-  name              = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.fts-api-gateway.id}/${aws_api_gateway_deployment.fts-api-gateway-deployment.stage_name}"
+  name              = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.fts-api-gateway.id}/${aws_api_gateway_stage.fts-api-gateway-stage.stage_name}"
   retention_in_days = 60
 }
 
@@ -172,7 +177,7 @@ resource "aws_iam_role" "fts-codebuild-iam" {
   name = "fts-codebuild"
 
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  assume_role_policy = <<EOF
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -283,27 +288,27 @@ resource "aws_codebuild_project" "fts" {
   service_role  = aws_iam_role.fts-codebuild-iam.arn
 
   artifacts {
-    packaging = "NONE"
-    name = "fts-reports"
-    namespace_type = "BUILD_ID"
+    packaging           = "NONE"
+    name                = "fts-reports"
+    namespace_type      = "BUILD_ID"
     encryption_disabled = false
-    location = "podaac-services-${var.stage}-deploy"
-    path = "internal/fts/test-reports"
-    type = "S3"
+    location            = "podaac-services-${var.stage}-deploy"
+    path                = "internal/fts/test-reports"
+    type                = "S3"
   }
 
   environment {
-    compute_type = "BUILD_GENERAL1_SMALL"
+    compute_type                = "BUILD_GENERAL1_SMALL"
     image_pull_credentials_type = "CODEBUILD"
-    privileged_mode = false
-    image = "aws/codebuild/standard:3.0"
-    type = "LINUX_CONTAINER"
+    privileged_mode             = false
+    image                       = "aws/codebuild/standard:3.0"
+    type                        = "LINUX_CONTAINER"
   }
 
   logs_config {
     cloudwatch_logs {
-      status = "ENABLED"
-      group_name = "codeBuild"
+      status      = "ENABLED"
+      group_name  = "codeBuild"
       stream_name = "FTS"
     }
 
@@ -314,8 +319,8 @@ resource "aws_codebuild_project" "fts" {
 
   source {
     insecure_ssl = false
-    type = "S3"
-    location = "podaac-services-${var.stage}-deploy/internal/fts/"
+    type         = "S3"
+    location     = "podaac-services-${var.stage}-deploy/internal/fts/"
   }
 
   vpc_config {
