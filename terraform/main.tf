@@ -31,7 +31,7 @@ locals {
     team : "TVA",
     application : "service-fts-${local.environment}",
     Environment = var.stage
-    Version     = var.docker_db_tag
+    Version     = var.app_version
   } : var.default_tags
 }
 
