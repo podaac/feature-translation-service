@@ -1,4 +1,4 @@
-variable "app_name" { default = "fts-api" }
+variable "api_app_name" { default = "fts-api" }
 variable "db_app_name" { default = "fts-db" }
 variable "stage" {}
 variable "vpc_id" {}

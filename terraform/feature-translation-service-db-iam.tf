@@ -1,11 +1,11 @@
 #IAM roles
 resource "aws_iam_instance_profile" "fts-service-db-profile" {
-  name = "${local.ec2_resources_name}-instance-profile"
+  name = "${local.ftsdb_resource_name}-instance-profile"
   role = aws_iam_role.fts-service-db-role.name
 }
 
 resource "aws_iam_policy" "fts-service-db-policy" {
-  name = "${local.ec2_resources_name}-policy"
+  name = "${local.ftsdb_resource_name}-policy"
   path = "/"
 
 
@@ -90,7 +90,7 @@ POLICY
 }
 
 resource "aws_iam_role" "fts-service-db-role" {
-  name = "${local.ec2_resources_name}-role"
+  name = "${local.ftsdb_resource_name}-role"
   tags = local.default_tags
 
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
@@ -112,7 +112,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "fts-service-db-attach" {
-  name = "${local.ec2_resources_name}-attachment"
+  name = "${local.ftsdb_resource_name}-attachment"
   roles = [
   aws_iam_role.fts-service-db-role.id]
   policy_arn = aws_iam_policy.fts-service-db-policy.arn

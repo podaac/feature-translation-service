@@ -1,7 +1,7 @@
 #----- Lambda Function --------
 resource "aws_lambda_function" "fts_sword_lambda" {
   filename         = var.lambda_package
-  function_name    = "${local.ec2_resources_name}-lambda-fargate-function"
+  function_name    = "${local.ftsdb_resource_name}-lambda-fargate-function"
   role             = aws_iam_role.lambda-role.arn
   handler          = "sword_fargate.run_fargate_task"
   source_code_hash = filebase64sha256(var.lambda_package)

@@ -1,19 +1,19 @@
 #----- AWS ECS Cluster--------
 resource "aws_ecs_cluster" "fargate-cluster" {
-  name = "${local.ec2_resources_name}-fargate-cluster"
+  name = "${local.ftsdb_resource_name}-fargate-cluster"
   tags = local.default_tags
 }
 
 #----- ECS  Services--------
 resource "aws_cloudwatch_log_group" "fargate-task-log-group" {
-  name              = "${local.ec2_resources_name}-fargate-worker"
+  name              = "${local.ftsdb_resource_name}-fargate-worker"
   retention_in_days = 60
   tags              = local.default_tags
 }
 
 #----- Fargate Task Definition --------
 resource "aws_ecs_task_definition" "fargate_task" {
-  family                   = "${local.ec2_resources_name}-fargate-task"
+  family                   = "${local.ftsdb_resource_name}-fargate-task"
   requires_compatibilities = ["FARGATE"]
   container_definitions    = <<EOF
 [
@@ -67,7 +67,7 @@ EOF
 
 #----- CloudWatch Log Group --------
 resource "aws_cloudwatch_log_group" "logs" {
-  name              = "/ecs/${local.ec2_resources_name}-fargate-task-logs"
+  name              = "/ecs/${local.ftsdb_resource_name}-fargate-task-logs"
   retention_in_days = var.logs_retention_days
   tags              = local.default_tags
 }

@@ -3,7 +3,7 @@ resource "aws_security_group" "service-db-sg" {
   description = "controls access to the database"
 
   vpc_id = var.vpc_id
-  name   = "${local.ec2_resources_name}-sg"
+  name   = "${local.ftsdb_resource_name}-sg"
   tags   = local.default_tags
 }
 
@@ -32,7 +32,7 @@ output "fts-db-sg-id" {
 }
 
 resource "aws_db_subnet_group" "default" {
-  name       = "${local.ec2_resources_name}-subnet"
+  name       = "${local.ftsdb_resource_name}-subnet"
   subnet_ids = var.private_subnets
 
   tags = local.default_tags
@@ -54,7 +54,7 @@ resource "random_password" "db_user_pass" {
 
 ## RDS Database
 resource "aws_db_instance" "fts-database" {
-  identifier             = "${local.ec2_resources_name}-rds"
+  identifier             = "${local.ftsdb_resource_name}-rds"
   allocated_storage      = 20
   storage_type           = "gp2"
   engine                 = "mysql"
@@ -72,49 +72,49 @@ resource "aws_db_instance" "fts-database" {
 }
 
 resource "aws_ssm_parameter" "fts-db-admin" {
-  name  = "${local.ec2_resources_name}-admin"
+  name  = "${local.ftsdb_resource_name}-admin"
   type  = "String"
   value = aws_db_instance.fts-database.username
   tags  = local.default_tags
 }
 
 resource "aws_ssm_parameter" "fts-db-admin-pass" {
-  name  = "${local.ec2_resources_name}-admin-pass"
+  name  = "${local.ftsdb_resource_name}-admin-pass"
   type  = "SecureString"
   value = aws_db_instance.fts-database.password
   tags  = local.default_tags
 }
 
 resource "aws_ssm_parameter" "fts-db-user" {
-  name  = "${local.ec2_resources_name}-user"
+  name  = "${local.ftsdb_resource_name}-user"
   type  = "String"
   value = "ftsuser"
   tags  = local.default_tags
 }
 
 resource "aws_ssm_parameter" "fts-db-user-pass" {
-  name  = "${local.ec2_resources_name}-user-pass"
+  name  = "${local.ftsdb_resource_name}-user-pass"
   type  = "SecureString"
   value = random_password.db_user_pass.result
   tags  = local.default_tags
 }
 
 resource "aws_ssm_parameter" "fts-db-host" {
-  name  = "${local.ec2_resources_name}-host"
+  name  = "${local.ftsdb_resource_name}-host"
   type  = "String"
   value = aws_db_instance.fts-database.address
   tags  = local.default_tags
 }
 
 resource "aws_ssm_parameter" "fts-db-name" {
-  name  = "${local.ec2_resources_name}-name"
+  name  = "${local.ftsdb_resource_name}-name"
   type  = "String"
   value = aws_db_instance.fts-database.db_name
   tags  = local.default_tags
 }
 
 resource "aws_ssm_parameter" "fts-db-sg" {
-  name  = "${local.ec2_resources_name}-sg"
+  name  = "${local.ftsdb_resource_name}-sg"
   type  = "String"
   value = aws_security_group.service-db-sg.id
   tags  = local.default_tags

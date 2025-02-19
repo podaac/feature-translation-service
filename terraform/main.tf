@@ -16,20 +16,20 @@ provider "aws" {
 }
 
 locals {
-  name        = var.app_name
+  name        = var.api_app_name
   environment = lower(var.stage)
 
   account_id = data.aws_caller_identity.current.account_id
 
   # This is the convention we use to know what belongs to each other
-  ec2_resources_name = "service-${local.name}-${local.environment}"
+  ftsapi_resource_name = "service-${var.api_app_name}-${local.environment}"
 
   # Used to refer to the FTS database resources by the same convention
   ftsdb_resource_name = "service-${var.db_app_name}-${local.environment}"
 
   default_tags = length(var.default_tags) == 0 ? {
     team : "TVA",
-    application : local.ec2_resources_name,
+    application : "service-fts-${local.environment}",
     Environment = var.stage
     Version     = var.docker_db_tag
   } : var.default_tags

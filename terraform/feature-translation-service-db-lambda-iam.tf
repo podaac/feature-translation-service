@@ -1,6 +1,6 @@
 #----- Lambda Policy Role --------
 resource "aws_iam_role_policy" "lambda_policy" {
-  name = "${local.ec2_resources_name}-lambda-policy"
+  name = "${local.ftsdb_resource_name}-lambda-policy"
   role = aws_iam_role.lambda-role.id
 
   policy = <<POLICY
@@ -59,7 +59,7 @@ POLICY
 
 #----- Lambda IAM Role --------
 resource "aws_iam_role" "lambda-role" {
-  name                 = "${local.ec2_resources_name}-lambda-role"
+  name                 = "${local.ftsdb_resource_name}-lambda-role"
   tags                 = local.default_tags
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
   assume_role_policy   = <<EOF
