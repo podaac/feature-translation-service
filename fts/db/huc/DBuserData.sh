@@ -6,9 +6,9 @@ exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 set -ex
 
 # Update all packages
-yum -y update
+dnf update -y
 # Install mysql client
-yum -y install mysql
+dnf install -y mariadb105
 #get HUC database dump from S3
 aws s3 cp s3://podaac-services-${tf_venue}-deploy/internal/HUC_Data.csv HUC_Data.csv
 
@@ -43,9 +43,8 @@ FTS_RDS_DBNAME=$(aws ssm get-parameter \
 # the password in the logs of the user data script.
 # Note, we also turn off command echoing while writing the file.
 
-mkdir -p "/etc/mysql"
 set +x
-cat << EOF > "/etc/mysql/my.cnf"
+cat << EOF > "/etc/my.cnf"
 [client]
 user=${FTS_ADMIN}
 password=$(aws ssm get-parameter \
