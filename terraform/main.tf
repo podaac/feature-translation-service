@@ -31,7 +31,7 @@ locals {
     team : "TVA",
     application : local.ec2_resources_name,
     Environment = var.stage
-    Version     = var.docker_tag
+    Version     = var.docker_db_tag
   } : var.default_tags
 }
 

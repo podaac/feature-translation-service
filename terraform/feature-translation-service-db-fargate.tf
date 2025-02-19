@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
 [
     {
         "name": "fts-sword-fargate-task",
-        "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_tag}",
+        "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_db_tag}",
         "secrets": [{
           "name": "DB_PASS",
           "valueFrom": "${aws_ssm_parameter.fts-db-user-pass.arn}"

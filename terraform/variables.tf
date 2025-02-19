@@ -16,7 +16,11 @@ variable "default_tags" {
   default = {}
 }
 
-variable "docker_tag" {
+variable "docker_api_tag" {
+  default = "poodaac-cloud/podaac-ftsapi:latest"
+}
+
+variable "docker_db_tag" {
   default = "poodaac-cloud/podaac-ftsdb-sword:latest"
 }
 

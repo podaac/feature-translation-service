@@ -99,7 +99,7 @@ resource "aws_lambda_function" "fts_api_lambdav1" {
   function_name = "${local.ec2_resources_name}-function"
   role          = aws_iam_role.fts-service-role.arn
   package_type  = "Image"
-  image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_tag}"
+  image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_api_tag}"
   timeout       = 5
 
   vpc_config {
