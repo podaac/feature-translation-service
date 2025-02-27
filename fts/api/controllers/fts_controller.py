@@ -37,7 +37,7 @@ logger.setLevel(logging.INFO)
 
 try:
     conn = pymysql.connect(
-        DB_HOST, user=DB_USERNAME, passwd=DB_PASSWORD, db=DB_NAME, connect_timeout=10
+        host=DB_HOST, user=DB_USERNAME, passwd=DB_PASSWORD, db=DB_NAME, connect_timeout=10
     )
 
 except pymysql.MySQLError as e:
