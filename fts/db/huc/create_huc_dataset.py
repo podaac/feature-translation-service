@@ -18,8 +18,8 @@ import sys
 import geopandas as gpd
 import pandas as pd
 
-from podaac.ftsdb.remove_multipolygons import remove
-from podaac.ftsdb.simplify_huc import create_resolutions_and_combine
+from fts.db.huc.remove_multipolygons import remove
+from fts.db.huc.simplify_huc import create_resolutions_and_combine
 
 
 def combine(arguments):
@@ -94,7 +94,7 @@ def parse_huc(huc_list):
         except ValueError:
             huc_category = int(element.split('.')[-2][-1:])
 
-        temp_df = temp_df[['HUC{}'.format(huc_category), 'Name', 'geometry']]
+        temp_df = temp_df[['huc{}'.format(huc_category), 'name', 'geometry']]
         temp_df.columns = ['HUC', 'Region', 'Geometry']
         temp_df['HUC'] = temp_df['HUC'].astype(str)
 

@@ -2,7 +2,7 @@
 name = "podaac-fts"
 version = "1.2.0-alpha.7"
 description = "The Feature Translation Service API and database for SWORD and HUC data."
-authors = ["podaac-cloud-dsa <podaac-cloud-dsa@jpl.nasa.gov>"]
+authors = ["PO.DAAC <podaac@jpl.nasa.gov>"]
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/podaac/fts"
@@ -14,37 +14,36 @@ packages = [
     { include = "fts"},
 ]
 
-[[tool.poetry.source]]
-name = "podaac"
-url = "https://cae-artifactory.jpl.nasa.gov/artifactory/api/pypi/pypi-release-virtual/simple"
-
-[[tool.poetry.source]]
-name = "ecc-nexus"
-url = "https://maven.earthdata.nasa.gov/repository/python-repo/simple/"
-
 [tool.poetry.dependencies]
-python = "^3.8"
-boto3 = "~1.20" # Should match at least major and minor version reported here: https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
-sqlalchemy = "^1.3"
-pymysql = "^1.0.2"
-geojson = "^2.5.0"
-colorama = "^0.4.4"
-geopandas ="0.9.0"
-pandas ="1.1.3"
-tqdm = "^4.56.2"
-visvalingamwyatt = "^0.1.4"
+python = "^3.12"
+boto3 = "^1.36.12"
+sqlalchemy = "^2.0.37"
+pymysql = "^1.1.1"
+geojson = "^3.2.0"
+colorama = "^0.4.6"
+geopandas = "^1.0.1"
+pandas = "^2.2.3"
+tqdm = "^4.67.1"
+visvalingamwyatt = "^0.3.0"
+fiona = "^1.10.1"
 
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
-flake8 = "^3.7"
-pytest-cov = "^2.8"
-pylint = "^2.4"
-sphinx = "^4.0"
-numpy = "^1.18.1"
-importlib_metadata = "^4.0.1"
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+flake8 = "^7.1.1"
+pytest-cov = "^6.0.0"
+pylint = "^3.3.4"
+sphinx = "^8.1.3"
+numpy = "^2.2.2"
+importlib-metadata = "^8.6.1"
 recommonmark = "^0.7.1"
-sphinx-markdown-tables = "^0.0.15"
-sphinx-rtd-theme = "^1.0"
+sphinx-markdown-tables = "^0.0.17"
+sphinx-rtd-theme = "^3.0.2"
+fiona = "^1.10.1"
+
+[tool.poetry.group.api.dependencies]
+boto3 = "^1.36.23"
+geojson = "^3.2.0"
+pymysql = "^1.1.1"
 
 [tool.poetry.scripts]
 run_sword = 'fts.db.sword.setup_sword:main'

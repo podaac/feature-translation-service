@@ -1,9 +1,9 @@
 #----- Fargate Task Execution Role --------
 resource "aws_iam_role" "fargate-task-execution-role" {
-  name               = "${local.ec2_resources_name}-fargate-task-execution-role"
+  name                 = "${local.ftsdb_resource_name}-fargate-task-execution-role"
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  tags = local.default_tags
-  assume_role_policy = <<EOF
+  tags                 = local.default_tags
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -21,8 +21,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "fargate-policy" {
-  name = "${local.ec2_resources_name}-fargate-policy"
-  role = aws_iam_role.fargate-task-execution-role.id
+  name   = "${local.ftsdb_resource_name}-fargate-policy"
+  role   = aws_iam_role.fargate-task-execution-role.id
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -63,10 +63,10 @@ POLICY
 
 #----- Fargate Task Role--------
 resource "aws_iam_role" "ecs_task_role" {
-  name               = "${local.ec2_resources_name}-fargate-task-role"
+  name                 = "${local.ftsdb_resource_name}-fargate-task-role"
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  tags = local.default_tags
-  assume_role_policy = <<EOF
+  tags                 = local.default_tags
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -84,8 +84,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "ecs_task_role_policy" {
-  name   = "${local.ec2_resources_name}-fargate-task-role-policy"
-  role = aws_iam_role.ecs_task_role.id
+  name   = "${local.ftsdb_resource_name}-fargate-task-role-policy"
+  role   = aws_iam_role.ecs_task_role.id
   policy = <<POLICY
 {
     "Version": "2012-10-17",
@@ -109,10 +109,10 @@ POLICY
 
 #----- CloudWatch Events - Role Management--------
 resource "aws_iam_role" "cloudwatch_events_role" {
-  name                  = "${local.ec2_resources_name}-fargate-task-events"
-  permissions_boundary  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  tags = local.default_tags
-  assume_role_policy    = <<EOF
+  name                 = "${local.ftsdb_resource_name}-fargate-task-events"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
+  tags                 = local.default_tags
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

@@ -20,6 +20,6 @@ def remove(geometry):
     """
 
     if geometry.type == 'MultiPolygon':
-        return max(geometry, key=lambda a: a.area)
+        return max(geometry.geoms, key=lambda a: a.area)
 
     return geometry

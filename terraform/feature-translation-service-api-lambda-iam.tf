@@ -1,13 +1,13 @@
 #IAM roles
 
 resource "aws_iam_instance_profile" "fts-service-profile" {
-  name = "${local.ec2_resources_name}-instance-profile"
+  name = "${local.ftsapi_resource_name}-instance-profile"
   role = aws_iam_role.fts-service-role.name
 }
 
 resource "aws_iam_policy" "fts-service-policy" {
-  name = "${local.ec2_resources_name}-service-policy"
-  path = "/"
+  name   = "${local.ftsapi_resource_name}-service-policy"
+  path   = "/"
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -73,10 +73,10 @@ POLICY
 }
 
 resource "aws_iam_role" "fts-service-role" {
-  name = "${local.ec2_resources_name}-service-role"
+  name = "${local.ftsapi_resource_name}-service-role"
 
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
-  assume_role_policy = <<EOF
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -94,7 +94,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "fts-service-attach" {
-  name       = "${local.ec2_resources_name}-attachment"
+  name       = "${local.ftsapi_resource_name}-attachment"
   roles      = [aws_iam_role.fts-service-role.id]
   policy_arn = aws_iam_policy.fts-service-policy.arn
 }

@@ -76,7 +76,7 @@ def test_return_node(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as node_controller
+    import fts.api.controllers.fts_controller as node_controller
 
     search_type = 'node'
     exact = True
@@ -113,7 +113,7 @@ def test_return_reach(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as node_controller
+    import fts.api.controllers.fts_controller as node_controller
 
     search_type = 'reach'
     exact = True
@@ -148,7 +148,7 @@ def test_return_river_name(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as node_controller
+    import fts.api.controllers.fts_controller as node_controller
 
     search_type = 'name'
     exact = False
