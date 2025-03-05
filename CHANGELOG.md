@@ -7,12 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
-- Updated dependency versions
+- Issue #1 - Test FTS refactor and migration to PO.DAAC GitHub organization
 ### Deprecated
 ### Removed
 ### Fixed
 ### Security
-- Changed CLI step in build action to use snyk monitor so that report is uploaded to SNYK podaac org
 
 ## [1.1.0]
 ### Added

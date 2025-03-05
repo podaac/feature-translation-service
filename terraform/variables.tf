@@ -1,28 +1,59 @@
-variable "app_name" {default = "fts-api"}
-variable "db_app_name" {default = "fts-db"}
-variable "stage" {}
-variable "credentials" {}
-variable "profile" { }
-variable "vpc_id" {}
-variable "private_subnets" {}
-variable "docker_tag" {}
-variable "default_vpc_sg" {}
-variable "lambda_package" {}
+variable "api_app_name" {
+  type    = string
+  default = "fts-api"
+}
 
-variable "region" {
-  default = "us-west-2"
+variable "app_version" {
+  type = string
+}
+
+variable "db_app_name" {
+  default = "fts-db"
+  type    = string
 }
 
 variable "default_tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
 
-variable "docker_tag" {
-  default = "poodaac-cloud/podaac-ftsdb:latest"
+variable "docker_api_tag" {
+  type    = string
+  default = "poodaac-cloud/podaac-ftsapi:latest"
+}
+
+variable "docker_db_tag" {
+  type    = string
+  default = "poodaac-cloud/podaac-ftsdb-sword:latest"
+}
+
+variable "lambda_package" {
+  type = string
+}
+variable "private_subnets" {
+  type = list(string)
+}
+
+variable "region" {
+  type    = string
+  default = "us-west-2"
+}
+
+variable "stage" {
+  type = string
+}
+
+variable "vpc_id" {
+  type = string
 }
 
 #----- Fargate Variables--------
+variable "logs_retention_days" {
+  type        = number
+  description = "(Optional) Retention days for logs of the Fargate task log group "
+  default     = 30
+}
+
 variable "platform_version" {
   type        = string
   description = "(Optional) Fargate platform version"
@@ -39,10 +70,4 @@ variable "task_memory" {
   type        = number
   description = "(Optional) Memory value for the Fargate task"
   default     = 8192
-}
-
-variable "logs_retention_days" {
-  type        = number
-  description = "(Optional) Retention days for logs of the Fargate task log group "
-  default     = 30
 }

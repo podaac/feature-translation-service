@@ -49,9 +49,9 @@ terraform init -reconfigure -input=false -backend-config="bucket=podaac-services
 # If not deploying a specific docker tag, allow terraform to use the default value (see variables.tf for default value).
 # Otherwise, supply the docker_tag variable to terraform.
 if [[ -z "${docker_tag}" ]]; then
-  terraform plan -input=false -var-file=tfvars/"${tf_venue}".tfvars -var="credentials=~/.aws/credentials" -var="lambda_package=${lambda_package}" -var="profile=ngap-service-${tf_venue}" -out="tfplan"
+  terraform plan -input=false -var-file=tfvars/"${tf_venue}".tfvars -var="lambda_package=${lambda_package}" -out="tfplan"
 else
-  terraform plan -input=false -var-file=tfvars/"${tf_venue}".tfvars -var="credentials=~/.aws/credentials" -var="lambda_package=${lambda_package}" -var="profile=ngap-service-${tf_venue}" -var="docker_tag=${docker_tag}" -out="tfplan"
+  terraform plan -input=false -var-file=tfvars/"${tf_venue}".tfvars -var="lambda_package=${lambda_package}" -var="docker_tag=${docker_tag}" -out="tfplan"
 fi
 
 # Apply the plan that was created

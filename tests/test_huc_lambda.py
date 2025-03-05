@@ -58,7 +58,7 @@ def test_return_geojson_huc(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     polygon_format = 'geojson'
     search_type = 'HUC'
@@ -114,7 +114,7 @@ def test_return_json_empty(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     polygon_format = 'geojson'
     search_type = 'HUC'
@@ -138,7 +138,7 @@ def test_return_geojson_region(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     polygon_format = 'geojson'
     search_type = 'region'
@@ -172,7 +172,7 @@ def test_flat_polygon_huc(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     polygon_format = 'flat'
     search_type = 'HUC'
@@ -207,7 +207,7 @@ def test_flat_polygon_region(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     polygon_format = 'flat'
     search_type = 'region'
@@ -242,7 +242,7 @@ def test_invalid_polygon_format(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     polygon_format = 'foo'
     search_type = 'region'
@@ -269,7 +269,7 @@ def test_missing_polygon_format(db_environs):
         @staticmethod
         def fetchall(): return results
 
-    import podaac.controllers.fts_controller as huc_controller
+    import fts.api.controllers.fts_controller as huc_controller
 
     flat_polygon_format = 'flat'
     none_polygon_format = None

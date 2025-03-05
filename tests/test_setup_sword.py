@@ -14,16 +14,15 @@ from unittest.mock import patch
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-try:
-    os.environ['DB_HOST'] = 'host'
-    os.environ['DB_NAME'] = 'db'
-    os.environ['DB_USER'] = 'user'
-    os.environ['DB_PASS'] = 'password'
-    os.environ['SWORD_S3_BUCKET'] = 'bucket'
-    os.environ['SWORD_S3_PATH'] = 'internal/SWORD/Reaches_Nodes_Test'
-    import podaac.sworddb.setup_sword as setup_sword
-except:
-    print("Cannot import podaac.sworddb.setup_sword")
+
+os.environ['DB_HOST'] = 'host'
+os.environ['DB_NAME'] = 'db'
+os.environ['DB_USER'] = 'user'
+os.environ['DB_PASS'] = 'password'
+os.environ['SWORD_S3_BUCKET'] = 'bucket'
+os.environ['SWORD_S3_PATH'] = 'internal/SWORD/Reaches_Nodes_Test'
+
+import fts.db.sword.setup_sword as setup_sword
 
 
 class TestSWORDdb(unittest.TestCase):

@@ -20,8 +20,6 @@ These are dependencies for deploying the entire Feature Translation Service that
 | --------------- | ------------ | ------------------------------------------------------- | ----------- |
 | stage           | tf_vars      | sit                                                     | staging environment to which we are deploying |
 | app_name        | tf_vars      | FTS                                                     | Name of the application being deployed - same for all environments|
-| credentials     | command line | ~/.aws/credentials                                      | AWS credential file to use for authentication |
-| profile         | command line | ngap-services-sit                                       | AWS Profile to use for authentication |
 | docker_tag      | command line | podaac/podaac-cloud/podaac-fts:1.0.0-alpha.3            | Name of docker image and tag as returned from `docker/build-docker.sh`. |
 | vpc_id          | tf_vars      | vpc-abcdfc64e8ce5cca8                                   | VPC Id for use. This is predefined by NGAP. |
 | private_subnets | tf_vars      | ["subnet-abcde06f25bd4047b","subnet-fghoj3417fedb7f05"] | private subnets for use within VPC. This is defined by NGAP |
@@ -72,8 +70,6 @@ These are dependencies for deploying the entire Feature Translation Service that
 | --------------- | ------------ | ------------------------------------------------------- | ----------- |
 | stage           | tf_vars      | sit                                                     | staging environment to which we are deploying |
 | app_name        | tf_vars      | FTS                                                     | Name of the application being deployed - same for all environments|
-| credentials     | command line | ~/.aws/credentials                                      | AWS credential file to use for authentication |
-| profile         | command line | ngap-services-sit                                       | AWS Profile to use for authentication |
 | vpc_id          | tf_vars      | vpc-abcdfc64e8ce5cca8                                   | VPC Id for use. This is predefined by NGAP. |
 | private_subnets | tf_vars      | ["subnet-abcde06f25bd4047b","subnet-fghoj3417fedb7f05"] | private subnets for use within VPC. This is defined by NGAP |
 
@@ -109,8 +105,8 @@ which will run the following commands in docker:
 
 ```shell script
 #terraform init -reconfigure -backend-config="bucket=podaac-services-${tf_venue}-terraform" -backend-config="profile=ngap-service-${tf_venue}"
-#terraform plan -var-file=tfvars/${tf_venue}.tfvars -var="credentials=~/.aws/credentials" -var="profile=ngap-service-${tf_venue}"
-#terraform apply -auto-approve -var-file=tfvars/${tf_venue}.tfvars -var="credentials=~/.aws/credentials" -var="profile=ngap-service-${tf_venue}"
+#terraform plan -var-file=tfvars/${tf_venue}.tfvars
+#terraform apply -auto-approve -var-file=tfvars/${tf_venue}.tfvars
 ```
 
 ## Populate Databases
@@ -133,7 +129,7 @@ FTS_SGID and FTS_SUBNET should be set to values of fts-db-sg-id and fts-db-subne
 Only one command is needed to destroy the database.
 
 ```shell script
-terraform destroy -var-file=tfvars/${tf_venue}.tfvars -var="credentials=~/.aws/credentials" -var="profile=ngap-service-${tf_venue}"
+terraform destroy -var-file=tfvars/${tf_venue}.tfvars
 ```
 
 This will take anywhere from 3-10 minutes, depending on the RDS database deletion.
