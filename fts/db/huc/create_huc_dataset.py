@@ -94,7 +94,7 @@ def parse_huc(huc_list):
         except ValueError:
             huc_category = int(element.split('.')[-2][-1:])
 
-        temp_df = temp_df[['huc{}'.format(huc_category), 'name', 'geometry']]
+        temp_df = temp_df[[f'huc{huc_category}', 'name', 'geometry']]
         temp_df.columns = ['HUC', 'Region', 'Geometry']
         temp_df['HUC'] = temp_df['HUC'].astype(str)
 

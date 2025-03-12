@@ -55,6 +55,12 @@ SOURCE_URL = 'ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/Hydrography/W
 ###################
 
 
+class RequestError(Exception):
+    """
+    Exception thrown if there is an error encoutered with request
+    """
+
+
 def create_feature(polygon, type):
     """
     Create a Geojson feature with 'type' property, which in this case
@@ -72,7 +78,7 @@ def create_feature(polygon, type):
     geojson.Feature
         The feature which contains the given geometry and properties
     """
-    return geojson.Feature(geometry=polygon, properties=dict(type=type))
+    return geojson.Feature(geometry=polygon, properties={"type": type})
 
 
 def str_to_float_pair_list(list_str):
@@ -158,7 +164,7 @@ def convert_flat_list_to_geojson_polygon(exterior_points, interior_points=None):
     return geojson.Polygon(points, precision=MAX_PRECISION)
 
 
-def return_json(cur, identifier, name, exact, polygon_format, elapsed_time, hits, page_number,
+def return_json(cur, identifier, name, exact, polygon_format, elapsed_time, hits, page_number,  # pylint: disable=too-many-positional-arguments
                 page_size):
     """
     Get the results of the DB query, and construct the resulting dict
@@ -199,13 +205,13 @@ def return_json(cur, identifier, name, exact, polygon_format, elapsed_time, hits
             polygon_format.lower() != 'geojson' and polygon_format.lower() != 'flat'):
         msg = f'400: Invalid polygon_format. Should be \'flat\' or \'geojson\', but ' \
               f'\'{polygon_format}\' was given.'
-        raise Exception(msg)
+        raise RequestError(msg)
 
     results_count = len(results)
 
     if results_count == 0:
         msg = f'404: Results with the specified {identifier} {name} were not found.'
-        raise Exception(msg)
+        raise RequestError(msg)
 
     partial_results = False
     status = "200 OK"
@@ -219,13 +225,13 @@ def return_json(cur, identifier, name, exact, polygon_format, elapsed_time, hits
     if partial_results:
         data['results_count'] = results_count
 
-    data['search on'] = dict(
-        parameter=identifier,
-        exact=exact,
-        polygon_format=polygon_format,
-        page_number=page_number,
-        page_size=page_size
-    )
+    data['search on'] = {
+        "parameter": identifier,
+        "exact": exact,
+        "polygon_format": polygon_format,
+        "page_number": page_number,
+        "page_size": page_size
+    }
 
     result_list = []
     for elem in results:
@@ -371,7 +377,7 @@ def get_river_name_hits_count(cur, name, include_reaches, include_nodes):
         cur.execute("SELECT COUNT(*) FROM reaches WHERE river_name LIKE %s", name)
     else:
         msg = '400: Both reaches and nodes are false.  At least one must be set to true.'
-        raise Exception(msg)
+        raise RequestError(msg)
 
     hits = cur.fetchall()
 
@@ -432,7 +438,7 @@ def lambda_handler(event, context):
                 if page_number < 1:
                     raise ValueError
             except ValueError as ex:
-                raise Exception("400: page_number must be a number, 1 or greater.") from ex
+                raise ValueError("400: page_number must be a number, 1 or greater.") from ex
 
         if 'page_size' in event['body'] and event['body']['page_size'] != '':
             try:
@@ -440,7 +446,7 @@ def lambda_handler(event, context):
                 if page_size < 1:
                     raise ValueError
             except ValueError as ex:
-                raise Exception("400: page_size must be a number, 1 or greater.") from ex
+                raise ValueError("400: page_size must be a number, 1 or greater.") from ex
 
         if 'exact' in event['body'] and event['body']['exact'].lower() == "true":
             exact = True
@@ -528,10 +534,10 @@ def lambda_handler(event, context):
         else:
             # Return 400 error assuming path is incorrect.
             msg = "400: The specified URL is invalid (does not exist)."
-            raise Exception(msg)
+            raise RequestError(msg)
 
 
-def process_river(river_name, exact, cur, start, include_reaches, include_nodes, page_number, page_size):
+def process_river(river_name, exact, cur, start, include_reaches, include_nodes, page_number, page_size):  # pylint: disable=too-many-positional-arguments
     """
     Submits a river_name query to the DB, and passes that result to the return_json_passthrough to get
     the output reaches and nodes results.
@@ -584,7 +590,7 @@ def process_river(river_name, exact, cur, start, include_reaches, include_nodes,
             cur.execute("SELECT * FROM reaches WHERE river_name = %s ORDER BY reach_id LIMIT %s,%s", args)
         else:
             msg = '400: Both reaches and nodes are false.  At least one must be set to true.'
-            raise Exception(msg)
+            raise RequestError(msg)
 
     # User queries partial river_name match
     else:
@@ -607,7 +613,7 @@ def process_river(river_name, exact, cur, start, include_reaches, include_nodes,
             cur.execute("SELECT * FROM reaches WHERE river_name LIKE %s ORDER BY reach_id LIMIT %s,%s", args)
         else:
             msg = '400: Both reaches and nodes are false.  At least one must be set to true.'
-            raise Exception(msg)
+            raise RequestError(msg)
 
     elapsed_time = round((time.time() - start) * 1000, 3)
 
@@ -615,7 +621,7 @@ def process_river(river_name, exact, cur, start, include_reaches, include_nodes,
                                     page_number, page_size)
 
 
-def process_reach(reach, river_name, exact, cur, start, page_number, page_size):
+def process_reach(reach, river_name, exact, cur, start, page_number, page_size):  # pylint: disable=too-many-positional-arguments
     """
     Submits a reach query to the DB, and passes that result to the return_json_passthrough to get
     the output reach results.
@@ -672,7 +678,7 @@ def process_reach(reach, river_name, exact, cur, start, page_number, page_size):
                                     page_number, page_size)
 
 
-def process_node(node, river_name, exact, cur, start, page_number, page_size):
+def process_node(node, river_name, exact, cur, start, page_number, page_size):  # pylint: disable=too-many-positional-arguments
     """
     Submits a node query to the DB, and passes that result to the return_json_passthrough to get
     the output node results.
@@ -730,7 +736,7 @@ def process_node(node, river_name, exact, cur, start, page_number, page_size):
                                     page_number, page_size)
 
 
-def return_json_pass_through(cur, identifier, name, river_name, exact, elapsed_time, hits, page_number, page_size):
+def return_json_pass_through(cur, identifier, name, river_name, exact, elapsed_time, hits, page_number, page_size):  # pylint: disable=too-many-positional-arguments
     """
     Get the results of the DB query, and construct the resulting dict given the identifier, name.
 
@@ -768,7 +774,7 @@ def return_json_pass_through(cur, identifier, name, river_name, exact, elapsed_t
 
     if results_count == 0:
         msg = f'404: Results with the specified {identifier} {name} were not found.'
-        raise Exception(msg)
+        raise RequestError(msg)
 
     partial_results = False
     status = "200 OK"
@@ -782,13 +788,13 @@ def return_json_pass_through(cur, identifier, name, river_name, exact, elapsed_t
     if partial_results:
         data['results_count'] = results_count
 
-    data['search on'] = dict(
-        parameter=identifier,
-        river_name=river_name,
-        exact=exact,
-        page_number=page_number,
-        page_size=page_size
-    )
+    data['search on'] = {
+        "parameter": identifier,
+        "river_name": river_name,
+        "exact": exact,
+        "page_number": page_number,
+        "page_size": page_size
+    }
     data['results'] = []
 
     columns = cur.description
