@@ -36,3 +36,25 @@ locals {
 }
 
 data "aws_caller_identity" "current" {}
+
+data "aws_vpc" "vpc_id" {
+  tags = {
+    "Name" : "Application VPC"
+  }
+}
+
+data "aws_subnet" "private_application_subnet" {
+  for_each = toset(data.aws_subnets.private_application_subnets.ids)
+  id       = each.value
+}
+
+data "aws_subnets" "private_application_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.application_vpc.id]
+  }
+  filter {
+    name   = "tag:Name"
+    values = ["Private application*"]
+  }
+}

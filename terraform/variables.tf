@@ -30,9 +30,6 @@ variable "docker_db_tag" {
 variable "lambda_package" {
   type = string
 }
-variable "private_subnets" {
-  type = list(string)
-}
 
 variable "region" {
   type    = string
@@ -40,10 +37,6 @@ variable "region" {
 }
 
 variable "stage" {
-  type = string
-}
-
-variable "vpc_id" {
   type = string
 }
 

@@ -9,7 +9,7 @@ data "aws_ssm_parameter" "fts-db-sg" {
 ## Application Lambda Security Group
 resource "aws_security_group" "service-app-sg" {
   description = "controls access to the lambda Application"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.vpc_id.id
   name        = "${local.ftsapi_resource_name}-sg"
 
   ingress {
@@ -50,7 +50,7 @@ resource "aws_lambda_function" "fts_api_lambda_0_2_1" {
   timeout       = 5
 
   vpc_config {
-    subnet_ids         = var.private_subnets
+    subnet_ids         = data.aws_subnets.private_application_subnets.ids
     security_group_ids = [aws_security_group.service-app-sg.id]
   }
 
@@ -103,7 +103,7 @@ resource "aws_lambda_function" "fts_api_lambdav1" {
   timeout       = 5
 
   vpc_config {
-    subnet_ids         = var.private_subnets
+    subnet_ids         = data.aws_subnets.private_application_subnets.ids
     security_group_ids = [aws_security_group.service-app-sg.id]
   }
 
@@ -139,7 +139,7 @@ resource "aws_api_gateway_rest_api" "fts-api-gateway" {
     {
       ftsapi_v021_lambda_arn = aws_lambda_function.fts_api_lambda_0_2_1.invoke_arn
       ftsapi_lambda_arn      = aws_lambda_function.fts_api_lambdav1.invoke_arn
-      vpc_id                 = var.vpc_id
+      vpc_id                 = data.aws_vpc.vpc_id.id
   })
   parameters = {
     "basemap" = "split"
