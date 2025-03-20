@@ -357,7 +357,8 @@ jobs:
     outputs:
       lambda_package_name: ${{ steps.set-outputs-lambda.outputs.lambda_package_name }}
     env:
-      LAMBDA_PACKAGE_NAME: ${{ env.RESOURCE_NAME_DB }}-sword.zip
+      LAMBDA_PACKAGE_NAME: ${{ github.repository }}-db-sword.zip
+
     steps:
       - name: Create Lambda zip file
         working-directory: terraform
