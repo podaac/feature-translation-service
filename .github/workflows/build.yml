@@ -360,6 +360,10 @@ jobs:
       LAMBDA_PACKAGE_NAME: ${{ github.repository }}-db-sword.zip
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+
       - name: Create Lambda zip file
         working-directory: terraform
         run: |
