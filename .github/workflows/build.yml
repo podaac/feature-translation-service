@@ -38,8 +38,8 @@ env:
   PYTHON_VERSION: "3.10"
   TERRAFORM_VERSION: "1.9.3"
   REGISTRY: ghcr.io
-  RESOURCE_NAME_API: ${{ github.event.repository.name }}-api
-  RESOURCE_NAME_DB: ${{ github.event.repository.name }}-db
+  RESOURCE_NAME_API: ${{ github.repository }}-api
+  RESOURCE_NAME_DB: ${{ github.repository }}-db
 
 jobs:
   # First job in the workflow installs and verifies the software
@@ -373,7 +373,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.LAMBDA_PACKAGE_NAME }}
-          path: ${{ env.LAMBDA_PACKAGE_NAME }}
+          path: terraform/${{ env.LAMBDA_PACKAGE_NAME }}
 
       - name: Set output for lambda zip
         id: set-outputs-lambda
