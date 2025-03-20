@@ -2,7 +2,7 @@
 resource "aws_security_group" "service-db-sg" {
   description = "controls access to the database"
 
-  vpc_id = var.vpc_id
+  vpc_id = data.aws_vpc.vpc_id.id
   name   = "${local.ftsdb_resource_name}-sg"
   tags   = local.default_tags
 }
@@ -33,7 +33,7 @@ output "fts-db-sg-id" {
 
 resource "aws_db_subnet_group" "default" {
   name       = "${local.ftsdb_resource_name}-subnet"
-  subnet_ids = var.private_subnets
+  subnet_ids = data.aws_subnets.private_application_subnets.ids
 
   tags = local.default_tags
 }

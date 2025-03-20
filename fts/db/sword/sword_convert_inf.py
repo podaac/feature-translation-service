@@ -3,7 +3,6 @@
 """
 Converts inf values to NaN in SWORD shapefiles
 """
-import os
 import glob
 import numpy as np
 import geopandas as gpd

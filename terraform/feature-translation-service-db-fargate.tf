@@ -11,6 +11,39 @@ resource "aws_cloudwatch_log_group" "fargate-task-log-group" {
   tags              = local.default_tags
 }
 
+#----- ECS Container Image--------
+resource "aws_ecr_repository" "lambda_image_repo_db" {
+  name = local.ftsdb_resource_name
+  tags = var.default_tags
+}
+
+resource "null_resource" "ecr_login_db" {
+  triggers = {
+    image_uri = var.docker_db_tag
+  }
+  provisioner "local-exec" {
+    interpreter = ["/bin/sh", "-e", "-c"]
+    command     = <<EOF
+      docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS -p ${data.aws_ecr_authorization_token.token.password}
+      EOF
+  }
+}
+
+resource "null_resource" "upload_ecr_image_db" {
+  depends_on = [null_resource.ecr_login_db]
+  triggers = {
+    image_uri = var.docker_db_tag
+  }
+  provisioner "local-exec" {
+    interpreter = ["/bin/sh", "-e", "-c"]
+    command     = <<EOF
+      docker pull ${var.docker_db_tag}
+      docker tag ${var.docker_db_tag} ${aws_ecr_repository.lambda_image_repo_db.repository_url}:${local.ecr_image_tag_db}
+      docker push ${aws_ecr_repository.lambda_image_repo_db.repository_url}:${local.ecr_image_tag_db}
+      EOF
+  }
+}
+
 #----- Fargate Task Definition --------
 resource "aws_ecs_task_definition" "fargate_task" {
   family                   = "${local.ftsdb_resource_name}-fargate-task"
@@ -19,7 +52,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
 [
     {
         "name": "fts-sword-fargate-task",
-        "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_db_tag}",
+        "image": "${aws_ecr_repository.lambda_image_repo_db.repository_url}:${data.aws_ecr_image.lambda_image_db.image_tag}",
         "secrets": [{
           "name": "DB_PASS",
           "valueFrom": "${aws_ssm_parameter.fts-db-user-pass.arn}"
