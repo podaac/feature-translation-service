@@ -38,8 +38,8 @@ env:
   PYTHON_VERSION: "3.10"
   TERRAFORM_VERSION: "1.9.3"
   REGISTRY: ghcr.io
-  RESOURCE_NAME_API: ${{ github.repository }}-api
-  RESOURCE_NAME_DB: ${{ github.repository }}-db
+  RESOURCE_NAME_API: ${{ github.event.repository.name }}-api
+  RESOURCE_NAME_DB: ${{ github.event.repository.name }}-db
 
 jobs:
   # First job in the workflow installs and verifies the software
@@ -357,7 +357,7 @@ jobs:
     outputs:
       lambda_package_name: ${{ steps.set-outputs-lambda.outputs.lambda_package_name }}
     env:
-      LAMBDA_PACKAGE_NAME: ${{ github.repository }}-db-sword.zip
+      LAMBDA_PACKAGE_NAME: ${{ github.event.repository.name }}-db-sword.zip
 
     steps:
       - uses: actions/checkout@v4
@@ -429,6 +429,6 @@ jobs:
         run: |
           terraform init -reconfigure \
               -backend-config="bucket=podaac-services-${{ env.DEPLOY_ENV }}-terraform" \
-              -backend-config="key=services/feature-translation-service/${{ github.repository }}.tfstate"
+              -backend-config="key=services/feature-translation-service/${{ github.event.repository.name }}.tfstate"
           terraform plan -input=false -out="tfplan"
           # terraform apply -input=false -auto-approve tfplan
