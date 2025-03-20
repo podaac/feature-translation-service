@@ -193,7 +193,7 @@ def load_reaches(engine, sword_shp_path):
                                                          schema=source.schema
                                                          ) as dest:
             for feat in source:
-                coords = (len(feat['geometry']['coordinates']))
+                coords = len(feat['geometry']['coordinates'])
                 if coords >= 2:
                     dest.write(feat)
         return clean_shpfile_name
@@ -201,7 +201,7 @@ def load_reaches(engine, sword_shp_path):
     try:
         _, dirs, _ = next(walk(sword_shp_path))
     except StopIteration:
-        raise Exception("Directory not found")
+        raise StopIteration("Directory not found")
     sword_dir_paths = ["/".join([sword_shp_path, d]) for d in dirs]
     logger.debug(sword_dir_paths)
 
@@ -212,7 +212,7 @@ def load_reaches(engine, sword_shp_path):
         try:
             _, dirs, filenames = next(walk(dpath))
         except StopIteration:
-            raise Exception("Directory not found")
+            raise StopIteration("Directory not found")
 
         reach_shapefiles = [
             "/".join([dpath, name]) for name in filenames
@@ -373,7 +373,7 @@ def load_nodes(engine, sword_shp_path):
     try:
         _, dirs, _ = next(walk(sword_shp_path))
     except StopIteration:
-        raise Exception("Directory not found")
+        raise StopIteration("Directory not found")
     sword_dir_paths = ["/".join([sword_shp_path, d]) for d in dirs]
     logger.debug(sword_dir_paths)
 
@@ -384,7 +384,7 @@ def load_nodes(engine, sword_shp_path):
         try:
             _, dirs, filenames = next(walk(dpath))
         except StopIteration:
-            raise Exception("Directory not found")
+            raise StopIteration("Directory not found")
         node_shapefiles = \
             ["/".join([dpath, name]) for name in filenames
              if name.endswith(".shp") and "nodes" in name]

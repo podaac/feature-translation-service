@@ -9,7 +9,7 @@ data "aws_ssm_parameter" "fts-db-sg" {
 ## Application Lambda Security Group
 resource "aws_security_group" "service-app-sg" {
   description = "controls access to the lambda Application"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.vpc_id.id
   name        = "${local.ftsapi_resource_name}-sg"
 
   ingress {
@@ -40,6 +40,39 @@ resource "aws_security_group_rule" "allow_app_in" {
   source_security_group_id = aws_security_group.service-app-sg.id
 }
 
+# ECR container image
+resource "aws_ecr_repository" "lambda_image_repo_api" {
+  name = local.ftsapi_resource_name
+  tags = var.default_tags
+}
+
+resource "null_resource" "ecr_login_api" {
+  triggers = {
+    image_uri = var.docker_api_tag
+  }
+  provisioner "local-exec" {
+    interpreter = ["/bin/sh", "-e", "-c"]
+    command     = <<EOF
+      docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS -p ${data.aws_ecr_authorization_token.token.password}
+      EOF
+  }
+}
+
+resource "null_resource" "upload_ecr_image_api" {
+  depends_on = [null_resource.ecr_login_api]
+  triggers = {
+    image_uri = var.docker_api_tag
+  }
+  provisioner "local-exec" {
+    interpreter = ["/bin/sh", "-e", "-c"]
+    command     = <<EOF
+      docker pull ${var.docker_api_tag}
+      docker tag ${var.docker_api_tag} ${aws_ecr_repository.lambda_image_repo_api.repository_url}:${local.ecr_image_tag_api}
+      docker push ${aws_ecr_repository.lambda_image_repo_api.repository_url}:${local.ecr_image_tag_api}
+      EOF
+  }
+}
+
 # Lambda Function for the last stable pre-1.0 release of the API. This function is intended to be temprorary
 # and should be removed once clients have moved off of this version (primarily, earthdata search client)
 resource "aws_lambda_function" "fts_api_lambda_0_2_1" {
@@ -50,7 +83,7 @@ resource "aws_lambda_function" "fts_api_lambda_0_2_1" {
   timeout       = 5
 
   vpc_config {
-    subnet_ids         = var.private_subnets
+    subnet_ids         = data.aws_subnets.private_application_subnets.ids
     security_group_ids = [aws_security_group.service-app-sg.id]
   }
 
@@ -99,11 +132,11 @@ resource "aws_lambda_function" "fts_api_lambdav1" {
   function_name = "${local.ftsapi_resource_name}-function"
   role          = aws_iam_role.fts-service-role.arn
   package_type  = "Image"
-  image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/${var.docker_api_tag}"
+  image_uri     = "${aws_ecr_repository.lambda_image_repo_api.repository_url}:${data.aws_ecr_image.lambda_image_api.image_tag}"
   timeout       = 5
 
   vpc_config {
-    subnet_ids         = var.private_subnets
+    subnet_ids         = data.aws_subnets.private_application_subnets.ids
     security_group_ids = [aws_security_group.service-app-sg.id]
   }
 
@@ -139,7 +172,7 @@ resource "aws_api_gateway_rest_api" "fts-api-gateway" {
     {
       ftsapi_v021_lambda_arn = aws_lambda_function.fts_api_lambda_0_2_1.invoke_arn
       ftsapi_lambda_arn      = aws_lambda_function.fts_api_lambdav1.invoke_arn
-      vpc_id                 = var.vpc_id
+      vpc_id                 = data.aws_vpc.vpc_id.id
   })
   parameters = {
     "basemap" = "split"

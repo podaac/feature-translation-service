@@ -63,23 +63,23 @@ def write_to_shapefiles(multi_geometry, huc, shapefile_location):
         # Convert to GeoSeries to be able to convert geometry to shapefile
         geometry = gpd.GeoSeries(multi_geometry)
         os.mkdir(shapefile_location + huc)  # Make a directory with name = HUC
-        geometry.to_file(shapefile_location + '{}.shp'.format(base_path))
+        geometry.to_file(shapefile_location + f'{base_path}.shp')
     except FileExistsError as err:
         print(err)
         time.sleep(0.1)  # Race condition may occur with Pandas apply
         geometry = gpd.GeoSeries(multi_geometry)
-        geometry.to_file(shapefile_location + '{}.shp'.format(base_path))
+        geometry.to_file(shapefile_location + f'{base_path}.shp')
 
     # Just used to create the ZIP files to upload to S3
-    with zipfile.ZipFile('{}.zip'.format(shapefile_location + huc), 'w') as zipf:
-        zipf.write(shapefile_location + '{}.shp'.format(base_path),
-                   arcname='{}'.format(huc + "/") + huc + ".shp")
-        zipf.write(shapefile_location + '{}.cpg'.format(base_path),
-                   arcname='{}'.format(huc + "/") + huc + ".cpg")
-        zipf.write(shapefile_location + '{}.shx'.format(base_path),
-                   arcname='{}'.format(huc + "/") + huc + ".shx")
-        zipf.write(shapefile_location + '{}.dbf'.format(base_path),
-                   arcname='{}'.format(huc + "/") + huc + ".dbf")
+    with zipfile.ZipFile(f'{shapefile_location + huc}.zip', 'w') as zipf:
+        zipf.write(shapefile_location + f'{base_path}.shp',
+                   arcname=f'{huc + "/"}' + huc + ".shp")
+        zipf.write(shapefile_location + f'{base_path}.cpg',
+                   arcname=f'{huc + "/"}' + huc + ".cpg")
+        zipf.write(shapefile_location + f'{base_path}.shx',
+                   arcname=f'{huc + "/"}' + huc + ".shx")
+        zipf.write(shapefile_location + f'{base_path}.dbf',
+                   arcname=f'{huc + "/"}' + huc + ".dbf")
 
     shutil.rmtree(shapefile_location + huc)
 
