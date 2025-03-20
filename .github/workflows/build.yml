@@ -352,6 +352,7 @@ jobs:
 
   zip:
     name: Build & publish Lambda zip file
+    runs-on: ubuntu-latest
     needs: build
     outputs:
       lambda_package_name: ${{ steps.set-outputs-lambda.outputs.lambda_package_name }}
