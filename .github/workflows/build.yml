@@ -38,8 +38,10 @@ env:
   PYTHON_VERSION: "3.10"
   TERRAFORM_VERSION: "1.9.3"
   REGISTRY: ghcr.io
-  RESOURCE_NAME_API: ${{ github.repository }}-api
-  RESOURCE_NAME_DB: ${{ github.repository }}-db
+  RESOURCE_NAME_API_DOCKER: ${{ github.repository }}-api
+  RESOURCE_NAME_API_TF: ${{ github.event.repository.name }}-api
+  RESOURCE_NAME_DB_DOCKER: ${{ github.repository }}-db
+  RESOURCE_NAME_DB_TF: ${{ github.event.repository.name }}-db
 
 jobs:
   # First job in the workflow installs and verifies the software
@@ -300,7 +302,7 @@ jobs:
         id: meta-api
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.RESOURCE_NAME_API }}
+          images: ${{ env.REGISTRY }}/${{ env.RESOURCE_NAME_API_DOCKER }}
           tags: |
             type=pep440,pattern={{version}},value=${{ env.THE_VERSION }}
             type=raw,value=${{ needs.build.outputs.deploy_env }}
@@ -324,7 +326,7 @@ jobs:
         id: meta-db
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.RESOURCE_NAME_DB }}-sword
+          images: ${{ env.REGISTRY }}/${{ env.RESOURCE_NAME_DB_DOCKER }}-sword
           tags: |
             type=pep440,pattern={{version}},value=${{ env.THE_VERSION }}
             type=raw,value=${{ needs.build.outputs.deploy_env }}
@@ -414,21 +416,27 @@ jobs:
           aws-secret-access-key: ${{ secrets[vars.AWS_SECRET_ACCESS_KEY_SECRET_NAME] }}
           mask-aws-account-id: true
 
+
+      - name: lowercase deployment environment variable
+        id: lowercase
+        run: |
+          echo DEPLOY_ENV_LOWERCASE=${{ needs.build.outputs.deploy_env }} | tr '[:upper:]' '[:lower:]' >> "$GITHUB_OUTPUT"
+
       - name: Deploy to venue
         id: terraform-deploy
         working-directory: terraform
         env:
           TF_IN_AUTOMATION: true
           TF_VAR_app_version: ${{ env.THE_VERSION }}
-          TF_VAR_api_app_name: ${{ env.RESOURCE_NAME_API }}
+          TF_VAR_api_app_name: ${{ env.RESOURCE_NAME_API_TF }}
           TF_VAR_docker_api_tag: ${{ needs.docker.outputs.container_image_uri_api }}
           TF_VAR_docker_db_tag: ${{ needs.docker.outputs.container_image_uri_db }}
-          TF_VAR_db_app_name: ${{ env.RESOURCE_NAME_DB }}
+          TF_VAR_db_app_name: ${{ env.RESOURCE_NAME_DB_TF }}
           TF_VAR_lambda_package: ${{ needs.zip.outputs.lambda_package_name }}
-          TF_VAR_stage: ${{ env.DEPLOY_ENV }}
+          TF_VAR_stage: ${{ env.DEPLOY_ENV_LOWERCASE }}
         run: |
           terraform init -reconfigure \
-              -backend-config="bucket=podaac-services-${{ env.DEPLOY_ENV }}-terraform" \
+              -backend-config="bucket=podaac-services-${{ env.DEPLOY_ENV_LOWERCASE }}-terraform" \
               -backend-config="key=services/feature-translation-service/${{ github.event.repository.name }}.tfstate"
           terraform plan -input=false -out="tfplan"
           # terraform apply -input=false -auto-approve tfplan
