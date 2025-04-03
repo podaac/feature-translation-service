@@ -1,9 +1,3 @@
-
-# SSM Parameter values
-data "aws_ssm_parameter" "fts-db-sg" {
-  name = "${local.ftsdb_resource_name}-sg"
-}
-
 #Security Groups
 
 ## Application Lambda Security Group
@@ -33,7 +27,7 @@ resource "aws_security_group" "service-app-sg" {
 ## Allow ingress from the lambda security group to the database security group
 resource "aws_security_group_rule" "allow_app_in" {
   type                     = "ingress"
-  security_group_id        = data.aws_ssm_parameter.fts-db-sg.value
+  security_group_id        = aws_security_group.service-db-sg.id
   protocol                 = "tcp"
   from_port                = 3306
   to_port                  = 3306
