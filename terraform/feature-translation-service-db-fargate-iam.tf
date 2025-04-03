@@ -1,6 +1,6 @@
 #----- Fargate Task Execution Role --------
 resource "aws_iam_role" "fargate-task-execution-role" {
-  name                 = "${local.ftsdb_resource_name}-fargate-task-execution-role"
+  name                 = "${local.ftsdb_resource_name}-fargate-exe-role"
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/NGAPShRoleBoundary"
   tags                 = local.default_tags
   assume_role_policy   = <<EOF
