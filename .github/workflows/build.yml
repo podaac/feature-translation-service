@@ -402,7 +402,7 @@ jobs:
         with:
           repository: ${{ github.repository }}
 
-      - uses: actions/download-artifact@v4'
+      - uses: actions/download-artifact@v4
         with:
           name: ${{ needs.zip.outputs.lambda_package_name }}
           path: terraform/${{ needs.zip.outputs.lambda_package_name }}
@@ -420,7 +420,6 @@ jobs:
           aws-access-key-id: ${{ secrets[vars.AWS_ACCESS_KEY_ID_SECRET_NAME] }}
           aws-secret-access-key: ${{ secrets[vars.AWS_SECRET_ACCESS_KEY_SECRET_NAME] }}
           mask-aws-account-id: true
-
 
       - name: lowercase deployment environment variable
         id: lowercase
