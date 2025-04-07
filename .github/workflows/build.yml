@@ -406,6 +406,10 @@ jobs:
         with:
           name: ${{ needs.zip.outputs.lambda_package_name }}
           path: terraform/${{ needs.zip.outputs.lambda_package_name }}
+      - name: List downloaded artifact
+        run: |
+          ls -l
+          ls -l terraform
 
       - uses: hashicorp/setup-terraform@v3
         with:
