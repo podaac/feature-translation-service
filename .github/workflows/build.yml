@@ -449,4 +449,4 @@ jobs:
               -backend-config="bucket=podaac-services-${{ steps.lowercase.outputs.DEPLOY_ENV_LOWERCASE }}-terraform" \
               -backend-config="key=services/feature-translation-service/${{ github.event.repository.name }}.tfstate"
           terraform plan -input=false -out="tfplan"
-          # terraform apply -input=false -auto-approve tfplan
+          terraform apply -input=false -auto-approve tfplan
