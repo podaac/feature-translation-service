@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "podaac-fts"
-version = "1.2.0a15"
+version = "1.2.0a16"
 description = "The Feature Translation Service API and database for SWORD and HUC data."
 authors = ["PO.DAAC <podaac@jpl.nasa.gov>"]
 license = "Apache-2.0"
