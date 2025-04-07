@@ -408,9 +408,10 @@ jobs:
           path: terraform/${{ needs.zip.outputs.lambda_package_name }}
       - name: List downloaded artifact
         run: |
-          ls -l
-          ls -l terraform
-          ls -l terraform/${{ needs.zip.outputs.lambda_package_name }}
+          mv terraform/feature-translation-service-db-sword.zip terraform/feature-translation-service-db-sword.zip.dir
+          mv terraform/feature-translation-service-db-sword.zip.dir/feature-translation-service-db-sword.zip terraform/
+          rm -rf terraform/feature-translation-service-db-sword.zip.dir
+          ls -l terraform/
 
       - uses: hashicorp/setup-terraform@v3
         with:
