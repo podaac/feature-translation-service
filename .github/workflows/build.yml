@@ -433,10 +433,10 @@ jobs:
           TF_VAR_docker_db_tag: ${{ needs.docker.outputs.container_image_uri_db }}
           TF_VAR_db_app_name: ${{ env.RESOURCE_NAME_DB_TF }}
           TF_VAR_lambda_package: ${{ needs.zip.outputs.lambda_package_name }}
-          TF_VAR_stage: ${{ env.DEPLOY_ENV_LOWERCASE }}
+          TF_VAR_stage: ${{ steps.lowercase.outputs.TARGET_ENV_LOWERCASE }}
         run: |
           terraform init -reconfigure \
-              -backend-config="bucket=podaac-services-${{ env.DEPLOY_ENV_LOWERCASE }}-terraform" \
+              -backend-config="bucket=podaac-services-${{ steps.lowercase.outputs.TARGET_ENV_LOWERCASE }}-terraform" \
               -backend-config="key=services/feature-translation-service/${{ github.event.repository.name }}.tfstate"
           terraform plan -input=false -out="tfplan"
           # terraform apply -input=false -auto-approve tfplan
