@@ -402,6 +402,11 @@ jobs:
         with:
           repository: ${{ github.repository }}
 
+      - uses: actions/download-artifact@v4'
+        with:
+          name: ${{ needs.zip.outputs.lambda_package_name }}
+          path: terraform/${{ needs.zip.outputs.lambda_package_name }}
+
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
