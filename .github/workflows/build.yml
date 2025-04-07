@@ -410,6 +410,7 @@ jobs:
         run: |
           ls -l
           ls -l terraform
+          ls -l terraform/${{ needs.zip.outputs.lambda_package_name }}
 
       - uses: hashicorp/setup-terraform@v3
         with:
