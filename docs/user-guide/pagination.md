@@ -19,7 +19,7 @@ There are times when you may need to paginate a query result response as the sta
 }
 ```
 
-Or if your request keeps returning a time out error message:
+Or if your request keeps returning a time out error message.
 
 Sample request with a timeout:
 

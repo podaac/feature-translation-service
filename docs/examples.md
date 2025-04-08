@@ -2,7 +2,9 @@
 
 Top-level URL to query FTS: `FTS_URL=https://fts.podaac.earthdata.nasa.gov/v1`
 
-## Reaches (SWORD)
+## SWORD
+
+### Reaches
 
 ```python
 reach_identifier = '66120000013'
@@ -10,7 +12,7 @@ query_url = f'{FTS_URL}/rivers/reach/{reach_identifier}'
 response = requests.get(query_url)
 ```
 
-## Nodes (SWORD)
+### Nodes
 
 ```python
 node_identifier = '77199000010025'
@@ -18,7 +20,7 @@ query_url = f'{FTS_URL}/rivers/node/{node_identifier}'
 response = requests.get(query_url)
 ```
 
-## River Name (SWORD)
+### River Name
 
 ```python
 river_name = 'Ohio River'
@@ -26,7 +28,9 @@ query_url = f'{FTS_URL}/rivers/{river_name}' #if searching via river name instea
 response = requests.get(query_url)
 ```
 
-## Region Partial (HUC)
+## USGS
+
+### Region Partial
 
 ```python
 region = 'California'
@@ -34,7 +38,7 @@ query_url = f'{FTS_URL}/region/{region}'
 response = requests.get(query_url)
 ```
 
-## Region Exact (HUC)
+### Region Exact
 
 ```python
 region = 'Woods Creek-Skykomish River'
@@ -43,7 +47,7 @@ params={'exact': 'true'}
 response = requests.get(query_url, params=params
 ```
 
-## HUC Partial
+### HUC Partial
 
 ```python
 huc = '18050003'
@@ -51,7 +55,7 @@ query_url = f'{FTS_URL}/huc/{huc}'
 response = requests.get(query_url)
 ```
 
-## HUC Exact
+### HUC Exact
 
 ```python
 huc = '1805000301'
@@ -96,6 +100,7 @@ def paginate_fts(query_url, exact="false", params={}):
         print('\tpage_size: ', page_size, ', page_number: ', page_number - 1, ', hits: ', hits, ', # results: ', len(results))
 
     return results, result_url
+
 
 def query_fts(query_url, params):
     '''Query Feature Translation Service (FTS) for reach identifers using the query_url parameter.
@@ -144,11 +149,16 @@ def query_fts(query_url, params):
 Example usage:
 
 ```python
+FTS_URL=https://fts.podaac.earthdata.nasa.gov/v1
+
 # Search by basin identifier for nodes
-BASIN_IDENTIFIER = '711817' # to search via basin ID, find within SWORD database
-query_url = f'{FTS_URL}/rivers/node/{BASIN_IDENTIFIER}'
+basin_identifier = '711817' # to search via basin ID, find within SWORD database
+query_url = f'{FTS_URL}/rivers/node/{basin_identifier}'
+
 print(f'Searching for nodes by basin identifier ...{query_url}')
+
 results, results_url = paginate_fts(query_url)
+
 print(f'\tTotal nodes found for basin: {len(results)}')
 print(f'\tRequest URL: {results_url}')
 ```

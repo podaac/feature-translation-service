@@ -1,10 +1,10 @@
 # Rivers endpoint
 
-FTS_URL: `FTS_URL=https://fts.podaac.earthdata.nasa.gov/v1/rivers`
+FTS_URL: `https://fts.podaac.earthdata.nasa.gov/v1/rivers`
 
 The rivers endpoint queries geospatial river data from the [SWOT River Database (SWORD)](https://www.swordexplorer.com/). Please see each section for example requests and responses for each query type for the rivers end point.
 
-Please see [User Guide: Responses](/user-guide/responses) for more information on the response data common to all requests that gets returned.
+Please see [User Guide: Responses](/user-guide/response) for more information on the response data common to all requests that gets returned.
 
 ## reaches
 
@@ -271,8 +271,6 @@ The node response returns reach data in the `results` attribute for the node ide
 }
 ```
 
-Node response fields stored in the `results` attribute are taken from SWORD, please see the SWORD data description for each of these fields found within the SWORD file downloads at [this site](https://www.swordexplorer.com/).
-
 ### nodes (all nodes in a basin)
 
 Example URL: `https://fts.podaac.earthdata.nasa.gov/v1/rivers/node/711817`
@@ -509,7 +507,7 @@ By default both reaches and nodes are returned for river name queries. See below
 
 Example URL: `https://fts.podaac.earthdata.nasa.gov/v1/rivers/Ohio%20River?nodes=false&page_size=10&page_number=1`
 
-*The river name query for reaches only must include a `page_size` and `page_number` query parameter to prevent a timeout. Please see [User Guide: Responses](/user-guide/pagination) for a description on how to use these parameters.*
+*The river name query for reaches only must include a `page_size` and `page_number` query parameter to prevent a timeout. Please see [User Guide: Pagination](/user-guide/pagination) for a description on how to use these parameters.*
 
 The `nodes=false` query parameter is appended to the URL to remove nodes from the search results.
 

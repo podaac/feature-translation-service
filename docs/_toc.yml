@@ -8,30 +8,30 @@ root: intro
 parts:
 - caption: GETTING STARTED
   chapters:
-  - file: overview
-  - file: tutorials
-    sections:
-      - file: tutorials/huc-fts
-      - file: tutorials/huc-fts-visualize
-  - file: examples
-  - file: user-guide/start
-    sections:
-      - file: pagination
-      - file: response
+    - file: overview
+    - file: examples
 - caption: API ENDPOINTS
   chapters:
-  - file: rivers
-  - file: huc
-  - file: region
+    - file: rivers
+    - file: huc
+    - file: region
+- caption: USER GUIDE
+  chapters:
+    - file: user-guide/pagination
+    - file: user-guide/response
+- caption: TUTORIALS
+  chapters:
+    - file: tutorials/huc-fts
+    - file: tutorials/huc-fts-visualize
 - caption: RESOURCES
   chapters:
-  - url: https://github.com/podaac/feature-translation-service
-    title: GitHub Repository
-  - url: https://podaac.jpl.nasa.gov/SWOT
-    title: SWOT Mission Page
-  - url: https://www.swordexplorer.com/
-    title: SWOT River Database (SWORD) Explorer
-  - url: https://podaac.jpl.nasa.gov
-    title: PO.DAAC Website
-  - url: https://podaac.github.io/tutorials/
-    title: PO.DAAC Cookbook
+    - url: https://github.com/podaac/feature-translation-service
+      title: GitHub Repository
+    - url: https://podaac.jpl.nasa.gov/SWOT
+      title: SWOT Mission Page
+    - url: https://www.swordexplorer.com/
+      title: SWOT River Database (SWORD) Explorer
+    - url: https://podaac.jpl.nasa.gov
+      title: PO.DAAC Website
+    - url: https://podaac.github.io/tutorials/
+      title: PO.DAAC Cookbook

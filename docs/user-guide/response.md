@@ -1,4 +1,4 @@
-# response
+# Response
 
 All responses have common data attributes returned and are discussed here. Please see the API Endpoint documentation for the different requests and corresponding response details.
 

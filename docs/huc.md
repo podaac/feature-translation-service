@@ -1,10 +1,10 @@
 # HUC endpoint
 
-FTS_URL: `FTS_URL=https://fts.podaac.earthdata.nasa.gov/v1/huc`
+FTS_URL: `https://fts.podaac.earthdata.nasa.gov/v1/huc`
 
 The HUC endpoint queries geospatial river data from the [USGS Watershed Boundary Dataset](https://www.usgs.gov/national-hydrography/watershed-boundary-dataset).
 
-Please see [User Guide: Responses](/user-guide/responses) for more information on the response data common to all requests that gets returned.
+Please see [User Guide: Responses](/user-guide/response) for more information on the response data common to all requests that gets returned.
 
 ## huc (partial query)
 
