@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Issue #3 - Create GitHub action workflow for CI/CD
+- Issue #4 - Host API and database documentation on GitHub pages
 ### Changed
 - Issue #1 - Test FTS refactor and migration to PO.DAAC GitHub organization
 ### Deprecated
