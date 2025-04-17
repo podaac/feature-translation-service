@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - PODAAC-3275 - Added new API to search for nodes or reaches by exact river name: /rivers/{name}?reaches=true/false&nodes=true/false
 - PODAAC-3470 - Added new API to search for specific node ids or specific reaches by partial river name
-New APIs:
+- New APIs:
 - /rivers/reach/{id}?river_name=red       (query LIKE ('red%'))
 - /rivers/node/{id}?river_name=red        (query LIKE ('red%'))
 - /rivers/{partial name}?exact=true/false
