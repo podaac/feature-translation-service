@@ -174,3 +174,4 @@ cython_debug/
 *.zip
 HUC_DATA
 HUC_CSV
+fts/db/huc/deploy
