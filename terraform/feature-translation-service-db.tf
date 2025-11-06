@@ -69,6 +69,8 @@ resource "aws_db_instance" "fts-database" {
   db_subnet_group_name   = aws_db_subnet_group.default.id
   skip_final_snapshot    = true
   tags                   = local.default_tags
+  apply_immediately      = true
+  allow_major_version_upgrade = true
 }
 
 resource "aws_ssm_parameter" "fts-db-admin" {
