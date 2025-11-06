@@ -58,17 +58,19 @@ resource "aws_db_instance" "fts-database" {
   allocated_storage      = 20
   storage_type           = "gp2"
   engine                 = "mysql"
-  engine_version         = "5.7"
+  engine_version         = "8.0"
   instance_class         = "db.t3.micro"
   db_name                = "ftsdb"
   username               = "ftsadmin"
   password               = random_password.db_pass.result
-  parameter_group_name   = "default.mysql5.7"
+  parameter_group_name   = "default.mysql8.0"
   multi_az               = "true"
   vpc_security_group_ids = [aws_security_group.service-db-sg.id]
   db_subnet_group_name   = aws_db_subnet_group.default.id
   skip_final_snapshot    = true
   tags                   = local.default_tags
+  apply_immediately      = true
+  allow_major_version_upgrade = true
 }
 
 resource "aws_ssm_parameter" "fts-db-admin" {
