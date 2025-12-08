@@ -2,34 +2,38 @@
 
 set -ex
 
+TF_VENUE=$1
+AWS_PROFILE=$2
 CURRENTDATE=$(date +%s)
-mkdir -p deploy
-cat resources/DBuserData.sh | sed -e "s/\${tf_venue}/${tf_venue}/" > "deploy/DBuserData-${CURRENTDATE}.sh"
 
-FTS_SUBNET=$(aws --profile ngap-service-${tf_venue} ec2 describe-subnets \
+mkdir -p deploy
+
+cat resources/DBuserData.sh | sed -e "s/\${tf_venue}/${TF_VENUE}/" > "deploy/DBuserData-${CURRENTDATE}.sh"
+
+FTS_SUBNET=$(aws --profile $AWS_PROFILE ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Private application*" \
     --query "Subnets[*].{Id:SubnetId}[0]" \
     --output text)
 
-FTS_SGID=$(aws --profile ngap-service-${tf_venue} ec2 describe-security-groups \
-    --filters Name=tag:application,Values=service-fts-db-${tf_venue} \
+FTS_SGID=$(aws --profile $AWS_PROFILE ec2 describe-security-groups \
+    --filters Name=tag:application,Values=service-fts-${TF_VENUE} \
     --query "SecurityGroups[*].{Id:GroupId}[0]" \
     --output text)
 
-NGAP_AMI=$(aws --profile ngap-service-${tf_venue} ssm get-parameter \
+NGAP_AMI=$(aws --profile $AWS_PROFILE ssm get-parameter \
     --region us-west-2 \
-    --name "image_id_amz2" \
+    --name "/ngap/amis/image_id_al2023_x86" \
     --query 'Parameter.Value' \
     --output text)
 
 aws ec2 run-instances \
     --image-id ${NGAP_AMI} \
-    --tag-specifications "ResourceType=instance,Tags=[{Key=\"Name\",Value=\"service-fts-db-${tf_venue}-init\"}]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=\"Name\",Value=\"svc-feature-translation-service-db-${TF_VENUE}-init\"}]" \
     --count 1 \
     --instance-type t2.micro \
     --subnet-id "$FTS_SUBNET" \
     --security-group-ids "$FTS_SGID" \
-    --iam-instance-profile Name="service-fts-db-${tf_venue}-instance-profile" \
+    --iam-instance-profile Name="svc-feature-translation-service-db-${TF_VENUE}-instance-profile" \
     --instance-initiated-shutdown-behavior terminate \
-    --profile "ngap-service-${tf_venue}" \
+    --profile $AWS_PROFILE \
     --user-data "file://deploy/DBuserData-${CURRENTDATE}.sh"
