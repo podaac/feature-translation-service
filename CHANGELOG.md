@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  
 ### Added
 ### Changed
-- Update mysql from 5.7 to 8.0
+- Update mysql from 5.7 to 8.0 
 ### Deprecated
 ### Removed
 ### Fixed
