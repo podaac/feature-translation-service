@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [1.2.1]
+ 
+### Added
+### Changed
+- Update mysql from 5.7 to 8.0
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## [1.2.0]
 ### Added
 - Issue #3 - Create GitHub action workflow for CI/CD
