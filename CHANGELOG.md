@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 ### Changed
 - Updated python libraries 
+- Update myslq to 8.4
 ### Deprecated
 ### Removed
 ### Fixed
+- Issue #3 - Fix api gateway invoke api permission issue
 ### Security
 
 ## [1.2.1]
