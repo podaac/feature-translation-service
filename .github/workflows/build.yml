@@ -265,7 +265,7 @@ jobs:
           steps.alpha.conclusion == 'success'   ||
           steps.rc.conclusion == 'success'      ||
           steps.release.conclusion == 'success'
-        uses: ncipollo/release-action@v2
+        uses: ncipollo/release-action@v1
         with:
           generateReleaseNotes: true
           name: ${{ env.software_version }}
