@@ -300,7 +300,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker (API)
         id: meta-api
-        uses: docker/metadata-action@v7
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.RESOURCE_NAME_API_DOCKER }}
           tags: |
@@ -324,7 +324,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker (DB)
         id: meta-db
-        uses: docker/metadata-action@v7
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.RESOURCE_NAME_DB_DOCKER }}-sword
           tags: |
