@@ -58,7 +58,7 @@ jobs:
       pyproject_name: ${{ steps.poetry-build.outputs.pyproject_name }}
 
     steps:
-      - uses: getsentry/action-github-app-token@v4
+      - uses: getsentry/action-github-app-token@v4.0.0
         name: podaac cicd token
         id: podaac-cicd
         with:

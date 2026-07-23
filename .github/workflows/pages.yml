@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: getsentry/action-github-app-token@v4
+      - uses: getsentry/action-github-app-token@v4.0.0
         name: PODAAC CICD Token
         id: podaac-cicd
         with:
