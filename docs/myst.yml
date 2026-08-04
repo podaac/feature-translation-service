@@ -1,0 +1,53 @@
+version: 1
+
+project:
+  title: Feature Translation Service
+  authors:
+    - name: Physical Oceanography Distributed Active Archive Center (PO.DAAC)
+  copyright: "2025"
+  github: https://github.com/podaac/feature-translation-service
+  toc:
+    - file: intro.md
+    - title: Getting Started
+      children:
+        - file: overview.md
+        - file: examples.md
+    - title: API Endpoints
+      children:
+        - file: rivers.md
+        - file: huc.md
+        - file: region.md
+    - title: User Guide
+      children:
+        - file: user-guide/pagination.md
+        - file: user-guide/response.md
+    - title: Tutorials
+      children:
+        - file: tutorials/huc-fts.ipynb
+        - file: tutorials/huc-fts-visualize.ipynb
+    - title: Resources
+      children:
+        - url: https://github.com/podaac/feature-translation-service
+          title: GitHub Repository
+        - url: https://podaac.jpl.nasa.gov/SWOT
+          title: SWOT Mission Page
+        - url: https://www.swordexplorer.com/
+          title: SWOT River Database (SWORD) Explorer
+        - url: https://podaac.jpl.nasa.gov
+          title: PO.DAAC Website
+        - url: https://podaac.github.io/tutorials/
+          title: PO.DAAC Cookbook
+
+site:
+  title: Feature Translation Service
+  template: book-theme
+  options:
+    logo: fts_logo.png
+    favicon: fts_logo.png
+    style: custom.css
+    repository:
+      url: https://github.com/podaac/feature-translation-service
+      path: docs
+  parts:
+    primary_sidebar_footer: empty-footer.md
+    footer: footer.md
