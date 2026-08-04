@@ -60,6 +60,8 @@ jobs:
           poetry-version: ${{ env.POETRY_VERSION }}
 
       - name: Build the book
+        env:
+          BASE_URL: /feature-translation-service
         run: |
           poetry install --only docs
           cd docs && poetry run jupyter-book build --html
