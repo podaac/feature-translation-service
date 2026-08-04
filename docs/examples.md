@@ -44,7 +44,7 @@ response = requests.get(query_url)
 region = 'Woods Creek-Skykomish River'
 query_url = f'{FTS_URL}/region/{region}'
 params={'exact': 'true'}
-response = requests.get(query_url, params=params
+response = requests.get(query_url, params=params)
 ```
 
 ### HUC Partial
@@ -149,7 +149,7 @@ def query_fts(query_url, params):
 Example usage:
 
 ```python
-FTS_URL=https://fts.podaac.earthdata.nasa.gov/v1
+FTS_URL = 'https://fts.podaac.earthdata.nasa.gov/v1'
 
 # Search by basin identifier for nodes
 basin_identifier = '711817' # to search via basin ID, find within SWORD database

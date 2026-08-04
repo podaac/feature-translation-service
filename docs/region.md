@@ -75,7 +75,7 @@ Python requests library example:
 region = 'Woods Creek-Skykomish River'
 query_url = f'{FTS_URL}/region/{region}'
 params={'exact': 'true'}
-response = requests.get(query_url, params=params
+response = requests.get(query_url, params=params)
 ```
 
 Response:
