@@ -34,19 +34,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: getsentry/action-github-app-token@v3
+      - uses: getsentry/action-github-app-token@v4.0.0
         name: PODAAC CICD Token
         id: podaac-cicd
         with:
           app_id: ${{ secrets.CICD_APP_ID }}
           private_key: ${{ secrets.CICD_APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}
           token: ${{ steps.podaac-cicd.outputs.token }}
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -65,14 +65,14 @@ jobs:
           cd docs && poetry run jupyter-book build --html
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           # Upload only docs repository
           path: 'docs/_build/html'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
