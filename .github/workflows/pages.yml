@@ -4,13 +4,6 @@ name: Deploy documentation to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches:
-      - develop
-      - 'bugfix/**'
-      - 'feature/**'
-
-  # Runs on pull requests to test the build
-  pull_request:
     branches: ["develop"]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -26,7 +19,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages-${{ github.ref }}"
+  group: "pages"
   cancel-in-progress: false
 
 env:
@@ -34,7 +27,10 @@ env:
   PYTHON_VERSION: "3.12"
 
 jobs:
-  build:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
 
@@ -64,29 +60,18 @@ jobs:
           poetry-version: ${{ env.POETRY_VERSION }}
 
       - name: Build the book
-        env:
-          BASE_URL: /feature-translation-service
         run: |
           poetry install --only docs
           cd docs && poetry run jupyter-book build --html
 
-      - name: Upload artifact
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: 'docs/_build/html'
-
-  deploy:
-    needs: build
-    if: github.event_name != 'pull_request'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          # Upload only docs repository
+          path: 'docs/_build/html'
 
       - name: Deploy to GitHub Pages
         id: deployment
