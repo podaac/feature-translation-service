@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  
 ### Added
 ### Changed
+- update github actions to build even when its only a poetry.lock file change
 ### Deprecated
 ### Removed
 ### Fixed
 ### Security
+- poetry update python libraries
 
 ## [1.3.0]
  
