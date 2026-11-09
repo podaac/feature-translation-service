@@ -318,6 +318,9 @@ jobs:
           file: docker/ftsapi.Dockerfile
           push: true
           pull: true
+          # AWS Lambda rejects OCI image indexes (provenance/SBOM attestations)
+          provenance: false
+          sbom: false
           tags: ${{ steps.meta-api.outputs.tags }}
           labels: ${{ steps.meta-api.outputs.labels }}
 
