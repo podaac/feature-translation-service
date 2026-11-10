@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - update github actions to build even when its only a poetry.lock file change
 - update docker image build to push to aws
+- disable provenance/sbom attestations on the lambda docker image so aws lambda accepts it
 ### Deprecated
 ### Removed
 ### Fixed
