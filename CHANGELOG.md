@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
  
 ### Added
+- trigger build
 ### Changed
 - update github actions to build even when its only a poetry.lock file change
 - update docker image build to push to aws
