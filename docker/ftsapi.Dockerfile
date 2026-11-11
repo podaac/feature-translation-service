@@ -4,6 +4,12 @@ FROM public.ecr.aws/lambda/python:3.12
 RUN curl -sSL https://install.python-poetry.org | python3 -
 RUN ln -s ~/.local/bin/poetry /bin/poetry
 
+ENV POETRY_VIRTUALENVS_OPTIONS_NO_PIP=true
+
+# Patch OS packages the AWS base hasn't updated yet (needs --releasever) and drop the unused base pip
+RUN dnf --releasever=latest upgrade -y && dnf clean all && \
+    python3 -m pip uninstall -y pip
+
 # set up project files
 COPY poetry.lock pyproject.toml README.md ${LAMBDA_TASK_ROOT}
 COPY fts/api/controllers/fts_controller.py ${LAMBDA_TASK_ROOT}/fts/api/controllers/fts_controller.py

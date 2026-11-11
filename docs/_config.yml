@@ -22,7 +22,7 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/podaac/fts  # Online location of your book
+  url: https://github.com/podaac/feature-translation-service  # Online location of your book
   path_to_book: docs  # Optional path to your book, relative to the repository root
 
 # Add GitHub buttons to your book
