@@ -4,6 +4,13 @@ FROM python:3.12-slim
 # install OS dependencies
 RUN apt update && apt install -y curl libexpat1
 
+ENV POETRY_VIRTUALENVS_OPTIONS_NO_PIP=true
+
+# Patch OS packages the AWS base hasn't updated yet (needs --releasever) and drop the unused base pip
+RUN dnf --releasever=latest upgrade -y && dnf clean all && \
+    python3 -m pip uninstall -y pip
+
+
 # install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
 RUN ln -s ~/.local/bin/poetry /bin/poetry
