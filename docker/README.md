@@ -119,3 +119,10 @@ Example:
 export docker_tag=$(./docker/build-docker-db.sh -n podaac-fts-database -v 0.1.0)
 ./docker/push-docker-ecr.sh -v sit -t $docker_tag
 ```
+
+
+## Retrieve vulnerabilities
+
+### From AWS
+
+List the 
