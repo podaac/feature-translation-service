@@ -345,6 +345,8 @@ jobs:
           file: docker/ftsdb.Dockerfile
           push: true
           pull: true
+          provenance: false
+          sbom: false
           tags: ${{ steps.meta-db.outputs.tags }}
           labels: ${{ steps.meta-db.outputs.labels }}
 
