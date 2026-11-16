@@ -67,45 +67,6 @@ resource "null_resource" "upload_ecr_image_api" {
   }
 }
 
-# Lambda Function for the last stable pre-1.0 release of the API. This function is intended to be temprorary
-# and should be removed once clients have moved off of this version (primarily, earthdata search client)
-resource "aws_lambda_function" "fts_api_lambda_0_2_1" {
-  function_name = "${local.ftsapi_resource_name}-0_2_1"
-  role          = aws_iam_role.fts-service-role.arn
-  package_type  = "Image"
-  image_uri     = "${local.account_id}.dkr.ecr.us-west-2.amazonaws.com/podaac/podaac-cloud/podaac-fts:0.2.1"
-  timeout       = 5
-
-  vpc_config {
-    subnet_ids         = data.aws_subnets.private_application_subnets.ids
-    security_group_ids = [aws_security_group.service-app-sg.id]
-  }
-
-  environment {
-    variables = {
-      DB_HOST              = aws_ssm_parameter.fts-db-host.value
-      DB_NAME              = aws_ssm_parameter.fts-db-name.value
-      DB_USERNAME          = aws_ssm_parameter.fts-db-user.value
-      DB_PASSWORD_SSM_NAME = aws_ssm_parameter.fts-db-user-pass.name
-    }
-  }
-
-  tags = merge(local.default_tags, {
-    "Version" : "0.2.1"
-  })
-}
-
-resource "aws_lambda_permission" "allow_fts_0_2_1" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.fts_api_lambda_0_2_1.function_name
-  principal     = "apigateway.amazonaws.com"
-
-  # The "/*/*/*" portion grants access from any method on any resource
-  # within the API Gateway REST API.
-  source_arn = "${aws_api_gateway_rest_api.fts-api-gateway.execution_arn}/*/*/*"
-}
-
 resource "aws_api_gateway_deployment" "fts-api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.fts-api-gateway.id
   depends_on  = [aws_api_gateway_rest_api.fts-api-gateway]
@@ -164,9 +125,8 @@ resource "aws_api_gateway_rest_api" "fts-api-gateway" {
   body = templatefile(
     "${path.module}/api_specification_templates/fts_aws_api.yml",
     {
-      ftsapi_v021_lambda_arn = aws_lambda_function.fts_api_lambda_0_2_1.invoke_arn
-      ftsapi_lambda_arn      = aws_lambda_function.fts_api_lambdav1.invoke_arn
-      vpc_id                 = data.aws_vpc.vpc_id.id
+      ftsapi_lambda_arn = aws_lambda_function.fts_api_lambdav1.invoke_arn
+      vpc_id            = data.aws_vpc.vpc_id.id
   })
   parameters = {
     "basemap" = "split"

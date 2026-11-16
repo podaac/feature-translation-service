@@ -14,7 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - disable provenance/sbom attestations on the lambda docker image so aws lambda accepts it
 ### Deprecated
 ### Removed
+- **BREAKING API CHANGE** Removed the deprecated legacy (unversioned) routes `/huc`, `/region`, `/rivers/reach` and `/rivers/node`, and the pre-1.0 (0.2.1) API Lambda that served them. Use the `/v1` routes instead.
 ### Fixed
+- Unknown API paths now return a 404 with a link to the documentation instead of API Gateway's default 403 "Missing Authentication Token"
+- Update the HUC tutorial notebooks to use the `/v1` API and a current CMR SMAP collection
 ### Security
 - poetry update python libraries
 
