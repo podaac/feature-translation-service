@@ -75,6 +75,12 @@ resource "aws_api_gateway_deployment" "fts-api-gateway-deployment" {
       aws_api_gateway_rest_api.fts-api-gateway.body
     ]))
   }
+
+  # Create the new deployment and move the stage onto it before deleting the old one;
+  # API Gateway refuses to delete a deployment that a stage still points to.
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "fts-api-gateway-stage" {
@@ -127,6 +133,9 @@ resource "aws_api_gateway_rest_api" "fts-api-gateway" {
     {
       ftsapi_lambda_arn = aws_lambda_function.fts_api_lambdav1.invoke_arn
       vpc_id            = data.aws_vpc.vpc_id.id
+
+
+
   })
   parameters = {
     "basemap" = "split"
