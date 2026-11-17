@@ -5,14 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [1.4.0]
  
 ### Added
 - trigger build
-- UAT vs OPS regression test (`tests/test_uat_vs_ops_regression.py`), run with `FTS_REGRESSION=1`
 ### Changed
+- upgrade github actions to current major versions and poetry in the release workflow to 2.3.2
 - update github actions to build even when its only a poetry.lock file change
 - update docker image build to push to aws
 - disable provenance/sbom attestations on the lambda docker image so aws lambda accepts it
+- docs: fix example typos and repo url, set BASE_URL for the pages build
 ### Deprecated
 ### Removed
 - **BREAKING API CHANGE** Removed the deprecated legacy (unversioned) routes `/huc`, `/region`, `/rivers/reach` and `/rivers/node`, and the pre-1.0 (0.2.1) API Lambda that served them. Use the `/v1` routes instead.
