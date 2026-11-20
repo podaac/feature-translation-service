@@ -5,16 +5,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
- 
+
 ### Added
 ### Changed
-- update github actions to build even when its only a poetry.lock file change
-- update docker image build to push to aws
 ### Deprecated
 ### Removed
 ### Fixed
 ### Security
+
+## [1.4.0]
+ 
+### Added
+- trigger build
+### Changed
+- upgrade github actions to current major versions and poetry in the release workflow to 2.3.2
+- update github actions to build even when its only a poetry.lock file change
+- update docker image build to push to aws
+- disable provenance/sbom attestations on the lambda docker image so aws lambda accepts it
+- docs: fix example typos and repo url, set BASE_URL for the pages build
+### Deprecated
+### Removed
+- **BREAKING API CHANGE** Removed the deprecated legacy (unversioned) routes `/huc`, `/region`, `/rivers/reach` and `/rivers/node`, and the pre-1.0 (0.2.1) API Lambda that served them. Use the `/v1` routes instead.
+### Fixed
+- Unknown API paths now return a 404 with a link to the documentation instead of API Gateway's default 403 "Missing Authentication Token"
+- Update the HUC tutorial notebooks to use the `/v1` API, the list-based `results` format and a current CMR SMAP collection; CMR examples now print a short granule summary
+- API Gateway deployment is now created before the old one is destroyed, fixing "Active stages pointing to this deployment" deploy errors
+### Security
 - poetry update python libraries
+- patch OS packages and remove the unused base pip in the api and db docker images
 
 ## [1.3.0]
  
